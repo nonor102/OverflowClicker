@@ -22,7 +22,7 @@ public class UI : MonoBehaviour
 
     public void OnSbyteButtonClicked()
     {
-        GameManager.Instance.AddSbyteScore();
+        GameManager.Instance.UpdateSbyteScore();
     }
 
     /*void ScoreDisplayUpdate()
