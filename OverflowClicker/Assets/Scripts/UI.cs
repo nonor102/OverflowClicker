@@ -17,16 +17,20 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = "" + GameManager.Instance.SbyteScoreForDisplay;
+        scoreText.text = "AF: " + GameManager.Instance.AlphaFactorForDisplay;
+        if (GameManager.Instance.IsAlphaOverflowCollapsed && GameManager.Instance.AlphaOverflowCount > 0)
+        {
+            scoreText.text += "\n" + "(Overflow: " + GameManager.Instance.AlphaOverflowCount + ")";
+        }
     }
 
     public void OnSbyteButtonClicked()
     {
-        GameManager.Instance.UpdateSbyteScore();
+        GameManager.Instance.UpdateAlphaFactor();
     }
 
     /*void ScoreDisplayUpdate()
     {
-        scoreText.text = "" + GameManager.Instance.SbyteScoreForDisplay;
+        scoreText.text = "" + GameManager.Instance.AlphaFactorForDisplay;
     }*/
 }

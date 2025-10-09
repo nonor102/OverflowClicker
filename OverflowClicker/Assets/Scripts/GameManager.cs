@@ -8,16 +8,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } = null;
 
     // sbyte用の定数、変数、乗数たち
-    private double _sbyteScore = 0;
-    public sbyte SbyteScoreForDisplay { get; private set; } = 0;
-    public double AddSbyteScorePerClick { get; private set; } = 1; // クリックごとの増加スコア
-    public double SbyteScoreMulti { get; private set; } = 1; // 乗数
-    public double SbyteScoreExp { get; private set; } = 1; // 指数
-    public bool IsSbyteOverflowCollapsed { get; private set; } = false; // sbyteのオーバーフローがcollapseしたかどうかフラグ
-    public double SbyteOverflowCount { get; private set; } = 0; // sbyteがオーバーフローした回数
+    // sbyteはAF (Alpha Factor)という名前で管理する
+    private double _alphaFactor = 0; // 計算用のAF
+    public sbyte AlphaFactorForDisplay { get; private set; } = 0; // 表示用のAF
+    public double AddAlphaFactorPerClick { get; private set; } = 1; // クリックごとの増加AF
+    public double AlphaFactorMulti { get; private set; } = 1; // AF獲得乗数
+    public double AlphaFactorExp { get; private set; } = 1; // AF獲得指数
+    public bool IsAlphaOverflowCollapsed { get; private set; } = false; // Alphaのオーバーフローがcollapseしたかどうかフラグ
+    public double AlphaOverflowCount { get; private set; } = 0; // Alphaがオーバーフローした回数
 
     // short用の定数、変数、乗数たち
-
+    // shortはBF (Beta Factor)という名前で管理する
+    private double _betaFactor = 0; // 計算用のBF
+    public short BetaFactor { get; private set; } = 0; // 表示用のBF
+    public double AddBetaFactorPerGain { get; private set; } = 1; // 取得するBFの基本の数
+    public double BetaFactorMulti { get; private set; } = 1; // BF獲得乗数
+    public double BetaFactorExp { get; private set; } = 1; // BF獲得指数
+    public bool IsBetaOverflowCollapsed { get; private set; } = false; // Betaのオーバーフローがcollapseしたかどうかフラグ
+    public double BetaOverflowCount { get; private set; } = 0; // Betaがオーバーフローした回数
 
     private void Awake()
     {
@@ -32,79 +40,82 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateSbyteScore()
+    public void UpdateAlphaFactor()
     {
-        if (!IsSbyteOverflowCollapsed) // sbyteのcollapseフラグが立っていないとき
+        if (!IsAlphaOverflowCollapsed) // sbyteのcollapseフラグが立っていないとき
         {
-            if (SbyteScoreForDisplay >= 0)
+            if (AlphaFactorForDisplay >= 0)
             {
-                AddSbyteScore();
+                AddAlphaFactor();
             }
             else
             {
-                SbyteOverflowCount = 1;
-                _sbyteScore = 128; // オーバーフローすると表示上の値で-128に固定する
+                AlphaOverflowCount = 1;
+                _alphaFactor = 128; // オーバーフローすると表示上の値で-128に固定する
             }
         }
         else
         {
-            sbyte beforeValue = SbyteScoreForDisplay; // ボタンが押される前の値を代入しておく(オーバーフロー検知用)
-            SbyteValueSyncer(); // SbyteScoreの値を更新しておく
-            AddSbyteScore();
-            if (SbyteScoreForDisplay < 0 && beforeValue > 0) // SbyteScoreForDisplayの値が正の数から負の数へ変わったら
+            sbyte beforeValue = AlphaFactorForDisplay; // ボタンが押される前の値を代入しておく(オーバーフロー検知用)
+            AddAlphaFactor();
+            AlphaFactorSyncer(); // SbyteScoreの値を更新しておく
+            if (AlphaFactorForDisplay < 0 && beforeValue > 0) // AlphaFactorForDisplayの値が正の数から負の数へ変わったら
             {
-                SbyteOverflowCount++;
+                AlphaOverflowCount++;
+                Debug.Log("Alpha Overflow: " + AlphaOverflowCount);
             }
         }
-        SbyteValueSyncer();
-        Debug.Log("_sbyteScore: " + _sbyteScore);
-        Debug.Log("SbyteOverFlowCount: " + SbyteOverflowCount);
+        AlphaFactorSyncer();
+        /*
+        Debug.Log("_alphaFactor: " + _alphaFactor);
+        Debug.Log("AlphaOverflowCount: " + AlphaOverflowCount);
+        */
     }
 
-    public void AddSbyteScore() // _sbyteScoreの値を増加させる関数
+    public void AddAlphaFactor() // _sbyteScoreの値を増加させる関数
     {
-        _sbyteScore += Math.Pow((AddSbyteScorePerClick * SbyteScoreMulti), SbyteScoreExp); // (AddSbyteScorePerClick * SbyteScoreMulti) ^ SbyteScoreExp という計算
+        _alphaFactor += Math.Pow((AddAlphaFactorPerClick * AlphaFactorMulti), AlphaFactorExp); // (AddAlphaFactorPerClick * AlphaFactorMulti) ^ AlphaFactorExp という計算
     }
 
-    public void AddSbyteScoreMulti(double num) // SbyteScoreMultiの値を上昇させる関数
+    public void AddAlphaFactorMulti(double num) // AlphaFactorMultiの値を上昇させる関数
     {
-        SbyteScoreMulti += num;
-        Debug.Log("SbyteScoreMulti: " + SbyteScoreMulti);
+        AlphaFactorMulti += num;
+        Debug.Log("AlphaFactorMulti: " + AlphaFactorMulti);
     }
 
-    public void AddSbyteScoreExp(double num) // SbyteScoreExpの値を上昇させる関数
+    public void AddAlphaFactorExp(double num) // AlphaFactorExpの値を上昇させる関数
     {
-        SbyteScoreExp += num;
-        Debug.Log("SbyteScoreExp: " + SbyteScoreExp);
+        AlphaFactorExp += num;
+        Debug.Log("AlphaFactorExp: " + AlphaFactorExp);
     }
 
-    public void CollapseOrRestoreSbyte(bool value) // IsSbyteOverflowCollapsedのTFを変更する関数
+    public void CollapseOrRestoreAlpha(bool value) // IsAlphaOverflowCollapsedのTFを変更する関数
     {
         if (value)
         {
-            IsSbyteOverflowCollapsed = true;
+            IsAlphaOverflowCollapsed = true;
         }
         else
         {
-            IsSbyteOverflowCollapsed = false;
+            IsAlphaOverflowCollapsed = false;
         }
     }
 
-    private void SbyteValueSyncer() // SbyteScoreの値を_sbyteScoreの値と対応させる関数
+    private void AlphaFactorSyncer() // AlphaFactorForDisplayの値を_alphaFactorの値と対応させる関数
     {
-        SbyteScoreForDisplay = (sbyte)_sbyteScore;
-        Debug.Log("SbyteScoreForDisplay: " + SbyteScoreForDisplay);
+        AlphaFactorForDisplay = (sbyte)_alphaFactor;
+        Debug.Log("AlphaFactorForDisplay: " + AlphaFactorForDisplay);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        CollapseOrRestoreSbyte(true); // debug
+        CollapseOrRestoreAlpha(true); // debug
     }
 
     // Update is called once per frame
     void Update()
     {
-        //SbyteValueSyncer();
+        //AlphaFactorSyncer();
     }
 }
