@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 3665085609906308223}
   - component: {fileID: 1812422166970155243}
   - component: {fileID: 6970027152124677584}
+  - component: {fileID: 8853923295147676282}
   m_Layer: 5
   m_Name: BetaUpgradeButton
   m_TagString: Untagged
@@ -333,3 +334,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8853923295147676282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078037789678219268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd5a0dff7f9ac5b419c5c02807774ae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  betaUpgrade: {fileID: 0}
+  upgradeTitleText: {fileID: 0}
+  upgradeDescriptionText: {fileID: 0}

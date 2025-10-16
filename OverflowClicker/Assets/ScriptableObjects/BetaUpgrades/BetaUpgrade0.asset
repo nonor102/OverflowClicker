@@ -15,5 +15,5 @@ MonoBehaviour:
   missionID: 0
   title: "\u307B\u3093\u306E\u3059\u3053\u3057\u697D\u306B"
   needBetaFactor: 1
-  description: 
+  description: "AF\u306E\u7372\u5F97\u91CF\u30921.1\u500D\u5F37\u5316"
   preRequiredUpgrade: []

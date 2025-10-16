@@ -10,6 +10,7 @@ public class AlphaFactor : MonoBehaviour
     [SerializeField] private GameObject alpha2BetaButton;
     [SerializeField] private TextMeshProUGUI alphaFactorText;
     [SerializeField] private TextMeshProUGUI alpha2BetaText;
+    [SerializeField] private TextMeshProUGUI nowAFMultiAndExpText;
 
     public void OnAlphaFactorButtonClicked()
     {
@@ -44,5 +45,7 @@ public class AlphaFactor : MonoBehaviour
             alpha2BetaButton.SetActive(true);
             alpha2BetaText.text = "" + Math.Pow((GameManager.Instance.AddBetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) + "BFÇälìæ";
         }
+
+        nowAFMultiAndExpText.text = "AFälìæèÊêî: " + GameManager.Instance.AlphaFactorMulti + "\n" + "AFälìæéwêî: " + GameManager.Instance.AlphaFactorExp;
     }
 }
