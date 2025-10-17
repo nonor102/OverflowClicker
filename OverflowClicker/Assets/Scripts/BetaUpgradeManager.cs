@@ -7,7 +7,7 @@ public class BetaUpgradeManager : MonoBehaviour
 {
     public static BetaUpgradeManager Instance { get; private set; }
 
-    public List<BetaUpgrade> allMissions; // ゲーム内に存在する全ての強化のアセットを登録
+    public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
     private Dictionary<string, BetaUpgradeStatus> BetaUpgradeStatuses = new Dictionary<string, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
 
@@ -17,7 +17,7 @@ public class BetaUpgradeManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeMissions();
+            InitializeUpgrades();
         }
         else
         {
@@ -25,36 +25,36 @@ public class BetaUpgradeManager : MonoBehaviour
         }
     }
 
-    private void InitializeMissions() // ゲーム開始時に強化の状態を初期化する
+    private void InitializeUpgrades() // ゲーム開始時に強化の状態を初期化する
     {
-        foreach (var mission in allMissions)
+        foreach (var upgrade in allUpgrades)
         {
-            if (mission.preRequiredUpgrade == null || mission.preRequiredUpgrade.Count == 0)
+            if (upgrade.preRequiredUpgrade == null || upgrade.preRequiredUpgrade.Count == 0)
             {
-                BetaUpgradeStatuses[mission.missionID] = BetaUpgradeStatus.Available; // 前提条件がない強化は最初から強化可能
+                BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Available; // 前提条件がない強化は最初から強化可能
             }
             else
             {
-                BetaUpgradeStatuses[mission.missionID] = BetaUpgradeStatus.Locked; // それ以外は未開放状態
+                BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Locked; // それ以外は未開放状態
             }
         }
     }
 
-    public BetaUpgradeStatus GetBetaUpgradeStatus(string missionID) // 指定されたIDの強化の状態を取得する
+    public BetaUpgradeStatus GetBetaUpgradeStatus(string upgradeID) // 指定されたIDの強化の状態を取得する
     {
-        if (BetaUpgradeStatuses.ContainsKey(missionID))
+        if (BetaUpgradeStatuses.ContainsKey(upgradeID))
         {
-            return BetaUpgradeStatuses[missionID];
+            return BetaUpgradeStatuses[upgradeID];
         }
         return BetaUpgradeStatus.Locked;
     }
 
-    public void CompleteMission(string missionID) // 強化を完了させる処理
+    public void CompleteMission(string upgradeID) // 強化を完了させる処理
     {
-        if (BetaUpgradeStatuses.ContainsKey(missionID))
+        if (BetaUpgradeStatuses.ContainsKey(upgradeID))
         {
-            BetaUpgradeStatuses[missionID] = BetaUpgradeStatus.Completed; // 状態を解放済に更新
-            Debug.Log($"解放完了: {missionID}");
+            BetaUpgradeStatuses[upgradeID] = BetaUpgradeStatus.Completed; // 状態を解放済に更新
+            Debug.Log($"解放完了: {upgradeID}");
 
             UnlockNewUpgrades(); // この強化によってアンロックされる新しい強化を確認
         }
@@ -62,18 +62,18 @@ public class BetaUpgradeManager : MonoBehaviour
 
     private void UnlockNewUpgrades() // 新しい強化をアンロックする
     {
-        foreach (var mission in allMissions)
+        foreach (var upgrade in allUpgrades)
         {
-            if (BetaUpgradeStatuses[mission.missionID] == BetaUpgradeStatus.Locked) // まだロック状態の強化のみチェック
+            if (BetaUpgradeStatuses[upgrade.upgradeID] == BetaUpgradeStatus.Locked) // まだロック状態の強化のみチェック
             {
-                bool allPrerequisitesCompleted = mission.preRequiredUpgrade.All(p => // 前提条件がすべて完了しているかチェック
-                    GetBetaUpgradeStatus(p.missionID) == BetaUpgradeStatus.Completed
+                bool allPrerequisitesCompleted = upgrade.preRequiredUpgrade.All(p => // 前提条件がすべて完了しているかチェック
+                    GetBetaUpgradeStatus(p.upgradeID) == BetaUpgradeStatus.Completed
                 );
 
                 if (allPrerequisitesCompleted)
                 {
-                    BetaUpgradeStatuses[mission.missionID] = BetaUpgradeStatus.Available; // 全て完了していれば解放可能にする
-                    Debug.Log($"ミッション開放: {mission.title}");
+                    BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Available; // 全て完了していれば解放可能にする
+                    Debug.Log($"ミッション開放: {upgrade.title}");
                 }
             }
         }

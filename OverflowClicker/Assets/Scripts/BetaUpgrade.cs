@@ -13,7 +13,7 @@ public enum BetaUpgradeStatus
 public class BetaUpgrade : ScriptableObject
 {
     [Header("強化の情報")]
-    public string missionID; // ユニークなID
+    public string upgradeID; // ユニークなID
     public string title; // タイトル
     public double needBetaFactor; // 解放に必要なBetaFactorの数
     [TextArea]
@@ -21,6 +21,9 @@ public class BetaUpgrade : ScriptableObject
 
     [Header("前提となる強化")]
     public List<BetaUpgrade> preRequiredUpgrade;
+
+    [Header("状態")]
+    public BetaUpgradeStatus betaUpgradeStatus;
 
     //以下、必要な変数を準備
 }
