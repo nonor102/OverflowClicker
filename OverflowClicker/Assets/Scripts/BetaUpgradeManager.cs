@@ -7,9 +7,11 @@ public class BetaUpgradeManager : MonoBehaviour
 {
     public static BetaUpgradeManager Instance { get; private set; }
 
+    public bool IsUpgrade0Completed { get; private set; } = false; // 計算式の表示とかで使うフラグ
+
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
-    private Dictionary<string, BetaUpgradeStatus> BetaUpgradeStatuses = new Dictionary<string, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
+    private Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses = new Dictionary<int, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
 
     void Awake()
     {
@@ -17,7 +19,6 @@ public class BetaUpgradeManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeUpgrades();
         }
         else
         {
@@ -32,15 +33,17 @@ public class BetaUpgradeManager : MonoBehaviour
             if (upgrade.preRequiredUpgrade == null || upgrade.preRequiredUpgrade.Count == 0)
             {
                 BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Available; // 前提条件がない強化は最初から強化可能
+                Debug.Log("Available: " +  upgrade.upgradeID);
             }
             else
             {
                 BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Locked; // それ以外は未開放状態
+                Debug.Log("Locked: " + upgrade.upgradeID);
             }
         }
     }
 
-    public BetaUpgradeStatus GetBetaUpgradeStatus(string upgradeID) // 指定されたIDの強化の状態を取得する
+    public BetaUpgradeStatus GetBetaUpgradeStatus(int upgradeID) // 指定されたIDの強化の状態を取得する
     {
         if (BetaUpgradeStatuses.ContainsKey(upgradeID))
         {
@@ -49,11 +52,34 @@ public class BetaUpgradeManager : MonoBehaviour
         return BetaUpgradeStatus.Locked;
     }
 
-    public void CompleteMission(string upgradeID) // 強化を完了させる処理
+    public void CompleteUpgrade(int upgradeID) // 強化を完了させる処理
     {
         if (BetaUpgradeStatuses.ContainsKey(upgradeID))
         {
+            switch(upgradeID)
+            {
+                case 0:
+                    GameManager.Instance.AddAlphaFactorPerClick(1.1); // AF獲得量1.1倍
+                    IsUpgrade0Completed = true;
+                    break;
+                case 1:
+                    GameManager.Instance.AddAlphaFactorPerClick(1.1); // AF獲得量1.1倍
+                    break;
+                case 2:
+                    GameManager.Instance.AddBetaFactorPerGain(2); // BF獲得量2倍
+                    break;
+                case 3:
+                    GameManager.Instance.AddBetaFactorExp(1.1); // BF獲得指数1.1倍
+                    break;
+                case 4:
+                    GameManager.Instance.AddAlphaFactorExp(1.1); // AF獲得指数1.1倍
+                    break;
+                // どんどん追加していく...
+                default:
+                    break;
+            }
             BetaUpgradeStatuses[upgradeID] = BetaUpgradeStatus.Completed; // 状態を解放済に更新
+            Debug.Log(BetaUpgradeStatuses[upgradeID]);
             Debug.Log($"解放完了: {upgradeID}");
 
             UnlockNewUpgrades(); // この強化によってアンロックされる新しい強化を確認
@@ -73,9 +99,14 @@ public class BetaUpgradeManager : MonoBehaviour
                 if (allPrerequisitesCompleted)
                 {
                     BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Available; // 全て完了していれば解放可能にする
-                    Debug.Log($"ミッション開放: {upgrade.title}");
+                    Debug.Log($"強化開放: {upgrade.upgradeID}");
                 }
             }
         }
+    }
+
+    private void Start()
+    {
+        InitializeUpgrades();
     }
 }

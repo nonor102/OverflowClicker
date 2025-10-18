@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     // sbyteはAF (Alpha Factor)という名前で管理する
     private double _alphaFactor = 0; // 計算用のAF
     public sbyte AlphaFactorForDisplay { get; private set; } = 0; // 表示用のAF
-    public double AddAlphaFactorPerClick { get; private set; } = 1; // クリックごとの増加AF
+    public double AlphaFactorPerClick { get; private set; } = 1; // クリックごとの増加AF
     public double AlphaFactorMulti { get; private set; } = 1; // AF獲得乗数
     public double AlphaFactorExp { get; private set; } = 1; // AF獲得指数
     public bool IsAlphaOverflowCollapsed { get; private set; } = false; // Alphaのオーバーフローがcollapseしたかどうかフラグ
@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviour
 
     // short用の定数、変数、乗数たち
     // shortはBF (Beta Factor)という名前で管理する
+    public bool IsArrivedBeta { get; private set; } = false; // Betaに到達したかフラグ
     private double _betaFactor = 0; // 計算用のBF
     public short BetaFactorForDisplay { get; private set; } = 0; // 表示用のBF
     public double BetaNum { get; private set; } = 0; // alpha2betaの回数
     public double BetaNumPerGain {  get; private set; } = 1; // BetaNumを増やす数
-    public double AddBetaFactorPerGain { get; private set; } = 1; // 取得するBFの基本の数
+    public double BetaFactorPerGain { get; private set; } = 1; // 取得するBFの基本の数
     public double BetaFactorMulti { get; private set; } = 1; // BF獲得乗数
     public double BetaFactorExp { get; private set; } = 1; // BF獲得指数
     public bool IsBetaOverflowCollapsed { get; private set; } = false; // Betaのオーバーフローがcollapseしたかどうかフラグ
@@ -72,18 +73,24 @@ public class GameManager : MonoBehaviour
 
     public void AddAlphaFactor() // _alphaFactorの値を増加させる関数
     {
-        _alphaFactor += Math.Pow((AddAlphaFactorPerClick * AlphaFactorMulti), AlphaFactorExp); // (AddAlphaFactorPerClick * AlphaFactorMulti) ^ AlphaFactorExp という計算
+        _alphaFactor += Math.Pow((AlphaFactorPerClick * AlphaFactorMulti), AlphaFactorExp); // (AlphaFactorPerClick * AlphaFactorMulti) ^ AlphaFactorExp という計算
     }
 
-    public void AddAlphaFactorMulti(double num) // AlphaFactorMultiの値を上昇させる関数
+    public void AddAlphaFactorPerClick(double num) // numの値をAlphaFactorPerClickに掛けて値を上昇させる関数
     {
-        AlphaFactorMulti += num;
+        AlphaFactorPerClick *= num;
+        Debug.Log("AlphaFactorPerCiick: " + AlphaFactorPerClick);
+    }
+
+    public void AddAlphaFactorMulti(double num) // numの値をAlphaFactorMultiに掛けて値を上昇させる関数
+    {
+        AlphaFactorMulti *= num;
         Debug.Log("AlphaFactorMulti: " + AlphaFactorMulti);
     }
 
-    public void AddAlphaFactorExp(double num) // AlphaFactorExpの値を上昇させる関数
+    public void AddAlphaFactorExp(double num) // numの値をAlphaFactorExpに掛けて値を上昇させる関数
     {
-        AlphaFactorExp += num;
+        AlphaFactorExp *= num;
         Debug.Log("AlphaFactorExp: " + AlphaFactorExp);
     }
 
@@ -107,6 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void Alpha2Beta() // alphaをリセットしてbetaを取得する関数
     {
+        IsArrivedBeta = true;
         AddBetaFactor();
         AddBetaNum();
         BetaFactorSyncer();
@@ -118,7 +126,13 @@ public class GameManager : MonoBehaviour
 
     public void AddBetaFactor() // _betaFactorの値を増加させる関数
     {
-        _betaFactor += Math.Pow((AddBetaFactorPerGain * BetaFactorMulti), BetaFactorExp); // (AddBetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp という計算
+        _betaFactor += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp); // (BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp という計算
+    }
+
+    public void SubBetaFactor(double num)
+    {
+        _betaFactor -= num;
+        BetaFactorSyncer();
     }
 
     private void BetaFactorSyncer() // BetaFactorForDisplayの値を_betaFactorの値と対応させる関数
@@ -127,20 +141,33 @@ public class GameManager : MonoBehaviour
         Debug.Log("BetaFactorForDisplay: " + BetaFactorForDisplay);
     }
 
-    public void AddBetaNum()
+    public void AddBetaNum() // BetaNumの値を増加させる関数
     {
         BetaNum += BetaNumPerGain;
+        Debug.Log("BetaNum: " + BetaNum);
+    }
+
+    public void AddBetaFactorPerGain(double num) // numの値をBetaFactorPerGainに掛けて値を上昇させる関数
+    {
+        BetaFactorPerGain *= num;
+        Debug.Log("BetaFactorPerGain: " + BetaFactorPerGain);
+    }
+
+    public void AddBetaFactorMulti(double num) // numの値をBetaFactorMultiに掛けて値を上昇させる関数
+    {
+        BetaFactorMulti *= num;
+        Debug.Log("BetaFactorMulti: " + BetaFactorMulti);
+    }
+
+    public void AddBetaFactorExp(double num) // numの値をBetaFactorExpに掛けて値を上昇させる関数
+    {
+        BetaFactorExp *= num;
+        Debug.Log("BetaFactorExp: " + BetaFactorExp);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         CollapseOrRestoreAlpha(true); // debug
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //AlphaFactorSyncer();
     }
 }

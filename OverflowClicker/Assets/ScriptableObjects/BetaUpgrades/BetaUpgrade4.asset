@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba9e5e07a502b24aac093212b101023, type: 3}
   m_Name: BetaUpgrade4
   m_EditorClassIdentifier: 
-  missionID: 4
+  upgradeID: 4
   title: "AF\u306B\u3082\u6307\u6570\u3092\u304F\u3060\u3055\u3044"
   needBetaFactor: 4
-  description: "AF\u306E\u7372\u5F97\u91CF\u30921.1\u4E57\u5F37\u5316"
+  description: "AF\u306E\u7372\u5F97\u91CF\u30921.1\u4E57\u306B\u5F37\u5316"
   preRequiredUpgrade:
   - {fileID: 11400000, guid: 9c1d6046398c7214faf1564299984eb0, type: 2}
+  betaUpgradeStatus: 0

@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class AlphaFactor : MonoBehaviour
 {
     [SerializeField] private GameObject alpha2BetaButton;
     [SerializeField] private TextMeshProUGUI alphaFactorText;
     [SerializeField] private TextMeshProUGUI alpha2BetaText;
-    [SerializeField] private TextMeshProUGUI nowAFMultiAndExpText;
+    [SerializeField] private TextMeshProUGUI alphaFactorGainText;
+    [SerializeField] private GameObject displayAFEquationButton;
+    [SerializeField] private GameObject nowAFEquationPanel;
+    [SerializeField] private GameObject displayFactorsButton;
+    [SerializeField] private GameObject nowFactorsPanel;
 
     public void OnAlphaFactorButtonClicked()
     {
@@ -21,14 +26,17 @@ public class AlphaFactor : MonoBehaviour
     {
         GameManager.Instance.Alpha2Beta();
     }
-    
-    void Start()
+
+    private void Start()
     {
-        
+        displayFactorsButton.SetActive(false);
+        displayAFEquationButton.SetActive(false);
     }
 
     void Update()
     {
+        alphaFactorGainText.text = "" + (sbyte)Math.Pow((GameManager.Instance.AlphaFactorPerClick * GameManager.Instance.AlphaFactorMulti), GameManager.Instance.AlphaFactorExp) + "AF‚ğŠl“¾";
+
         alphaFactorText.text = "AF: " + GameManager.Instance.AlphaFactorForDisplay;
         if (GameManager.Instance.IsAlphaOverflowCollapsed && GameManager.Instance.AlphaOverflowCount > 0)
         {
@@ -43,9 +51,15 @@ public class AlphaFactor : MonoBehaviour
         if(GameManager.Instance.AlphaOverflowCount > 0)
         {
             alpha2BetaButton.SetActive(true);
-            alpha2BetaText.text = "" + Math.Pow((GameManager.Instance.AddBetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) + "BF‚ğŠl“¾";
+            alpha2BetaText.text = "" + (short)Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) + "BF‚ğŠl“¾";
         }
 
-        nowAFMultiAndExpText.text = "AFŠl“¾æ”: " + GameManager.Instance.AlphaFactorMulti + "\n" + "AFŠl“¾w”: " + GameManager.Instance.AlphaFactorExp;
+        if(BetaUpgradeManager.Instance.IsUpgrade0Completed == true)
+        {
+            displayFactorsButton.SetActive(true);
+            nowFactorsPanel.GetComponentInChildren<TextMeshProUGUI>().text = "BF: " + GameManager.Instance.BetaFactorForDisplay + " ƒÀ: " + GameManager.Instance.BetaNum;
+            displayAFEquationButton.SetActive(true);
+            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "Œ»İ‚ÌŒvZ®: \n" + "(" + GameManager.Instance.AlphaFactorPerClick + " * " + GameManager.Instance.AlphaFactorMulti + ") ^ " + GameManager.Instance.AlphaFactorExp;
+        }
     }
 }
