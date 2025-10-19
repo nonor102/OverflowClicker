@@ -1,0 +1,21 @@
+{
+    "AlphaFactor": 2.0,
+    "AlphaFactorPerClick": 1.0,
+    "AlphaFactorMulti": 1.0,
+    "AlphaFactorExp": 1.0,
+    "IsAlphaOverflowCollapsed": true,
+    "AlphaOverflowCount": 0.0,
+    "IsArrivedBeta": false,
+    "BetaFactor": 0.0,
+    "BetaNum": 0.0,
+    "BetaNumPerGain": 1.0,
+    "BetaFactorPerGain": 1.0,
+    "BetaFactorMulti": 1.0,
+    "BetaFactorExp": 1.0,
+    "IsBetaOverflowCollapsed": false,
+    "BetaOverflowCount": 0.0,
+    "IsUpgrade0Completed": false,
+    "IsUpgrade5Completed": false
+}{
+    "CompleteBetaUpgradeIDs": []
+}

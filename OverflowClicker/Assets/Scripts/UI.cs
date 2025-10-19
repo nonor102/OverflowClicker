@@ -20,11 +20,6 @@ public class UI : MonoBehaviour
         AlphaCanvasEnable();
     }
 
-    void Update()
-    {
-        
-    }
-
     public void AlphaCanvasEnable()
     {
         if(alpha != null)

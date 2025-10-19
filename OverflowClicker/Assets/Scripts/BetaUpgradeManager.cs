@@ -8,11 +8,11 @@ public class BetaUpgradeManager : MonoBehaviour
     public static BetaUpgradeManager Instance { get; private set; }
 
     public bool IsUpgrade0Completed { get; private set; } = false; // 計算式の表示とかで使うフラグ
-    public bool IsUpgrade5Completed {  get; private set; } = false; // AF取得の自動化が解放されてるかフラグ
+    public bool IsUpgrade5Completed { get; private set; } = false; // AF取得の自動化が解放されてるかフラグ
 
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
-    private Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses = new Dictionary<int, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
+    public Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses { get; private set; } = new Dictionary<int, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
 
     private void Awake()
     {
@@ -76,6 +76,8 @@ public class BetaUpgradeManager : MonoBehaviour
                     GameManager.Instance.AddAlphaFactorPerClick(5); // AF獲得量5倍
                     break;
                 case 5:
+                    IsUpgrade5Completed = true;
+                    break;
 
                 // どんどん追加していく...
                 default:
