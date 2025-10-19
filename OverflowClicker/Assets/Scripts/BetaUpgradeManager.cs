@@ -8,12 +8,13 @@ public class BetaUpgradeManager : MonoBehaviour
     public static BetaUpgradeManager Instance { get; private set; }
 
     public bool IsUpgrade0Completed { get; private set; } = false; // ŒvZ®‚Ì•\¦‚Æ‚©‚Åg‚¤ƒtƒ‰ƒO
+    public bool IsUpgrade5Completed {  get; private set; } = false; // AFæ“¾‚Ì©“®‰»‚ª‰ğ•ú‚³‚ê‚Ä‚é‚©ƒtƒ‰ƒO
 
     public List<BetaUpgrade> allUpgrades; // ƒQ[ƒ€“à‚É‘¶İ‚·‚é‘S‚Ä‚Ì‹­‰»‚ÌƒAƒZƒbƒg‚ğ“o˜^
 
     private Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses = new Dictionary<int, BetaUpgradeStatus>(); // Še‹­‰»‚ÌŒ»İ‚Ìó‘Ô‚ğ•Û‘¶‚·‚éDictionary
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -63,17 +64,19 @@ public class BetaUpgradeManager : MonoBehaviour
                     IsUpgrade0Completed = true;
                     break;
                 case 1:
-                    GameManager.Instance.AddAlphaFactorPerClick(1.1); // AFŠl“¾—Ê1.1”{
+                    GameManager.Instance.AddAlphaFactorPerClick(1.2); // AFŠl“¾—Ê1.2”{
                     break;
                 case 2:
-                    GameManager.Instance.AddBetaFactorPerGain(2); // BFŠl“¾—Ê2”{
+                    GameManager.Instance.AddBetaFactorPerGain(1.2); // BFŠl“¾—Ê1.2”{
                     break;
                 case 3:
-                    GameManager.Instance.AddBetaFactorExp(1.1); // BFŠl“¾w”1.1”{
+                    GameManager.Instance.AddBetaFactorPerGain(1.5); // BFŠl“¾—Ê1.5”{
                     break;
                 case 4:
-                    GameManager.Instance.AddAlphaFactorExp(1.1); // AFŠl“¾w”1.1”{
+                    GameManager.Instance.AddAlphaFactorPerClick(5); // AFŠl“¾—Ê5”{
                     break;
+                case 5:
+
                 // ‚Ç‚ñ‚Ç‚ñ’Ç‰Á‚µ‚Ä‚¢‚­...
                 default:
                     break;

@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeID: 1
   title: "\u3082\u3046\u3061\u3087\u3063\u3068\u6B32\u3057\u3044?"
-  needBetaFactor: 2
-  description: "AF\u306E\u7372\u5F97\u91CF\u3092\u3055\u3089\u306B1.1\u500D\u306B\u5F37\u5316"
+  needBetaFactor: 1
+  description: "AF\u306E\u7372\u5F97\u91CF\u3092\u3055\u3089\u306B1.2\u500D\u306B\u5F37\u5316"
   preRequiredUpgrade:
   - {fileID: 11400000, guid: eee17befde236d54c97732543dd6fba2, type: 2}
-  betaUpgradeStatus: 0
