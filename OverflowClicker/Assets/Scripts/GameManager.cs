@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,37 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void Start()
+    {
+        AlphaFactorSyncer();
+        BetaFactorSyncer();
+    }
+
+    public void InitializeDataFromJson(SaveData saveData) // jsonのデータをいれる
+    {
+        AlphaFactorForCalc = saveData.AlphaFactorForCalc;
+        AlphaFactorPerClick = saveData.AlphaFactorPerClick;
+        AlphaFactorMulti = saveData.AlphaFactorMulti;
+        AlphaFactorExp = saveData.AlphaFactorExp;
+        IsAlphaOverflowCollapsed = saveData.IsAlphaOverflowCollapsed;
+        AlphaOverflowCount = saveData.AlphaOverflowCount;
+
+        IsArrivedBeta = saveData.IsArrivedBeta;
+        BetaFactorForCalc = saveData.BetaFactorForCalc;
+        BetaNum = saveData.BetaNum;
+        BetaNumPerGain = saveData.BetaNumPerGain;
+        BetaFactorPerGain = saveData.BetaFactorPerGain;
+        BetaFactorMulti = saveData.BetaFactorMulti;
+        BetaFactorExp = saveData.BetaFactorExp;
+        IsBetaOverflowCollapsed = saveData.IsBetaOverflowCollapsed;
+        BetaOverflowCount = saveData.BetaOverflowCount;
+
+        AlphaFactorSyncer();
+        BetaFactorSyncer();
+
+        Debug.Log("data loaded");
     }
 
     public void UpdateAlphaFactor()
@@ -94,16 +126,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("AlphaFactorExp: " + AlphaFactorExp);
     }
 
-    public void CollapseOrRestoreAlpha(bool value) // IsAlphaOverflowCollapsedのTFを変更する関数
+    public void CollapseAlpha() // IsAlphaOverflowCollapsedをTに変更する関数
     {
-        if (value)
-        {
-            IsAlphaOverflowCollapsed = true;
-        }
-        else
-        {
-            IsAlphaOverflowCollapsed = false;
-        }
+        IsAlphaOverflowCollapsed = true;
     }
 
     private void AlphaFactorSyncer() // AlphaFactorForDisplayの値をAlphaFactorの値と対応させる関数
@@ -163,11 +188,5 @@ public class GameManager : MonoBehaviour
     {
         BetaFactorExp *= num;
         Debug.Log("BetaFactorExp: " + BetaFactorExp);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        CollapseOrRestoreAlpha(true); // debug
     }
 }

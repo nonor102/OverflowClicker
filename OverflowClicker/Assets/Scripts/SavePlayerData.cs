@@ -4,11 +4,12 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Linq;
 
 [Serializable]
 public class SaveData
 {
-    public double AlphaFactor;
+    public double AlphaFactorForCalc;
     public double AlphaFactorPerClick;
     public double AlphaFactorMulti;
     public double AlphaFactorExp;
@@ -16,7 +17,7 @@ public class SaveData
     public double AlphaOverflowCount;
 
     public bool IsArrivedBeta;
-    public double BetaFactor;
+    public double BetaFactorForCalc;
     public double BetaNum;
     public double BetaNumPerGain;
     public double BetaFactorPerGain;
@@ -27,6 +28,24 @@ public class SaveData
 
     public bool IsUpgrade0Completed;
     public bool IsUpgrade5Completed;
+    public bool IsUpgrade6Completed;
+
+    public SaveData()
+    {
+        AlphaFactorForCalc = 0.0;
+        AlphaFactorPerClick = 1.0;
+        AlphaFactorMulti = 1.0;
+        AlphaFactorExp = 1.0;
+        AlphaOverflowCount = 0.0;
+
+        BetaFactorForCalc = 0.0;
+        BetaNum = 0.0;
+        BetaNumPerGain = 1.0;
+        BetaFactorPerGain = 1.0;
+        BetaFactorMulti = 1.0;
+        BetaFactorExp = 1.0;
+        BetaOverflowCount = 0.0;
+    }
 }
 
 [Serializable]
@@ -44,16 +63,17 @@ public class GameSaveData
 
 public class SavePlayerData : MonoBehaviour
 {
-    private SaveData _data;
-    private BetaUpgradeClassWrapper _betaUpgradeClassWrapper;
+    public SaveData Data { get; private set; }
+    public BetaUpgradeClassWrapper BetaWrapper { get; private set; }
+
     private string _saveDataFilePath;
     private string _saveDataFileName = "PlayerData.json";
 
     private void Awake()
     {
-        _data = new SaveData();
-        _betaUpgradeClassWrapper = new BetaUpgradeClassWrapper();
-        _betaUpgradeClassWrapper.CompleteBetaUpgradeIDs = new List<int>();
+        Data = new SaveData();
+        BetaWrapper = new BetaUpgradeClassWrapper();
+        BetaWrapper.CompleteBetaUpgradeIDs = new List<int>();
 
         _saveDataFilePath = Path.Combine(Application.persistentDataPath, _saveDataFileName);
 
@@ -61,18 +81,25 @@ public class SavePlayerData : MonoBehaviour
         {
             Load();
         }
-        else
+    }
+
+    private void Start()
+    {
+        if (!File.Exists(_saveDataFilePath))
         {
             Save();
         }
+        GameManager.Instance.InitializeDataFromJson(Data);
+
+        BetaUpgradeManager.Instance.InitializeFromSaveData(BetaWrapper.CompleteBetaUpgradeIDs);
     }
 
     private void Save() // jsonにする
     {
         GameSaveData gameSaveData = new GameSaveData
         {
-            mainData = _data,
-            betaUpgradeData = _betaUpgradeClassWrapper
+            mainData = Data,
+            betaUpgradeData = BetaWrapper
         };
 
         string json = JsonUtility.ToJson(gameSaveData, true);
@@ -86,27 +113,27 @@ public class SavePlayerData : MonoBehaviour
 
         GameSaveData loadedData = JsonUtility.FromJson<GameSaveData>(json);
 
-        _data = loadedData.mainData;
-        _betaUpgradeClassWrapper = loadedData.betaUpgradeData;
+        Data = loadedData.mainData;
+        BetaWrapper = loadedData.betaUpgradeData;
 
-        if (_data == null) _data = new SaveData();
-        if (_betaUpgradeClassWrapper == null)
+        if (Data == null) Data = new SaveData();
+        if (BetaWrapper == null)
         {
-            _betaUpgradeClassWrapper = new BetaUpgradeClassWrapper();
-            _betaUpgradeClassWrapper.CompleteBetaUpgradeIDs = new List<int>();
+            BetaWrapper = new BetaUpgradeClassWrapper();
+            BetaWrapper.CompleteBetaUpgradeIDs = new List<int>();
         }
     }
 
     public void SaveUserData()
     {
-        SaveVariables(_data, _betaUpgradeClassWrapper);
+        SaveVariables(Data, BetaWrapper);
         Save();
         Debug.Log("userdata is saved to: " + _saveDataFilePath);
     }
 
     private void SaveVariables(SaveData saveData, BetaUpgradeClassWrapper betaUpgradeClassWrapper) // データをGameManagerとかからとってくる
     {
-        saveData.AlphaFactor = GameManager.Instance.AlphaFactorForCalc;
+        saveData.AlphaFactorForCalc = GameManager.Instance.AlphaFactorForCalc;
         saveData.AlphaFactorPerClick = GameManager.Instance.AlphaFactorPerClick;
         saveData.AlphaFactorMulti = GameManager.Instance.AlphaFactorMulti;
         saveData.AlphaFactorExp = GameManager.Instance.AlphaFactorExp;
@@ -114,7 +141,7 @@ public class SavePlayerData : MonoBehaviour
         saveData.AlphaOverflowCount = GameManager.Instance.AlphaOverflowCount;
 
         saveData.IsArrivedBeta = GameManager.Instance.IsArrivedBeta;
-        saveData.BetaFactor = GameManager.Instance.BetaFactorForCalc;
+        saveData.BetaFactorForCalc = GameManager.Instance.BetaFactorForCalc;
         saveData.BetaNum = GameManager.Instance.BetaNum;
         saveData.BetaNumPerGain = GameManager.Instance.BetaNumPerGain;
         saveData.BetaFactorPerGain = GameManager.Instance.BetaFactorPerGain;
@@ -125,10 +152,15 @@ public class SavePlayerData : MonoBehaviour
 
         saveData.IsUpgrade0Completed = BetaUpgradeManager.Instance.IsUpgrade0Completed;
         saveData.IsUpgrade5Completed = BetaUpgradeManager.Instance.IsUpgrade5Completed;
+        saveData.IsUpgrade6Completed = BetaUpgradeManager.Instance.IsUpgrade6Completed;
 
-        betaUpgradeClassWrapper.CompleteBetaUpgradeIDs.Clear();
-        betaUpgradeClassWrapper.CompleteBetaUpgradeIDs.AddRange(
-            BetaUpgradeManager.Instance.BetaUpgradeStatuses.Keys
-        );
+        // BetaUpgradeStatuses ディクショナリの中から、
+        // 値(Value)が Completed であるものだけを抽出し(Where)、
+        // そのキー(Key)だけを選択して(Select)、
+        // 新しいリストとして(ToList)代入する。
+        betaUpgradeClassWrapper.CompleteBetaUpgradeIDs = BetaUpgradeManager.Instance.BetaUpgradeStatuses
+            .Where(pair => pair.Value == BetaUpgradeStatus.Completed)
+            .Select(pair => pair.Key)
+            .ToList();
     }
 }

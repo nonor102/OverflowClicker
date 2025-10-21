@@ -38,6 +38,7 @@ public class BetaUpgradePopUpUI : MonoBehaviour
             upgradeButton.onClick.RemoveAllListeners();
             titleText.text = upgrade.title;
             descriptionText.text = upgrade.description;
+            upgradeButton.GetComponentInChildren<TextMeshProUGUI>().text = "ã≠âªçœÇ›";
             gameObject.SetActive(true);
             Debug.LogWarning("Upgrade" + upgrade.upgradeID + " is Completed");
         }

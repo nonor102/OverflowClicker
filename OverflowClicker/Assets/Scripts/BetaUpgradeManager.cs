@@ -9,6 +9,7 @@ public class BetaUpgradeManager : MonoBehaviour
 
     public bool IsUpgrade0Completed { get; private set; } = false; // 計算式の表示とかで使うフラグ
     public bool IsUpgrade5Completed { get; private set; } = false; // AF取得の自動化が解放されてるかフラグ
+    public bool IsUpgrade6Completed { get; private set; } = false; // AlphaがCollapseしてるかフラグ
 
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
@@ -20,6 +21,8 @@ public class BetaUpgradeManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            InitializeUpgrades();
         }
         else
         {
@@ -42,6 +45,23 @@ public class BetaUpgradeManager : MonoBehaviour
                 Debug.Log("Locked: " + upgrade.upgradeID);
             }
         }
+    }
+
+    public void InitializeFromSaveData(List<int> completedIDs)
+    {
+        if (completedIDs == null) return;
+
+        // ロードした完了済みIDのリストを使って、効果を再適用していく
+        foreach (int id in completedIDs)
+        {
+            // 効果適用と状態更新を同時に行うCompleteUpgradeを呼び出す
+            CompleteUpgrade(id);
+        }
+
+        // 全ての効果を適用後、アンロック状態を再計算する
+        UnlockNewUpgrades();
+
+        Debug.Log("BetaUpgrade data initialized from save file.");
     }
 
     public BetaUpgradeStatus GetBetaUpgradeStatus(int upgradeID) // 指定されたIDの強化の状態を取得する
@@ -78,6 +98,10 @@ public class BetaUpgradeManager : MonoBehaviour
                 case 5:
                     IsUpgrade5Completed = true;
                     break;
+                case 6:
+                    IsUpgrade6Completed = true;
+                    GameManager.Instance.CollapseAlpha();
+                    break;
 
                 // どんどん追加していく...
                 default:
@@ -108,10 +132,5 @@ public class BetaUpgradeManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void Start()
-    {
-        InitializeUpgrades();
     }
 }
