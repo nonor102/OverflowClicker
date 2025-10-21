@@ -7669,7 +7669,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba4df95658c3ee49a34e5d118950bad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allUpgrades: []
+  allUpgrades:
+  - {fileID: 11400000, guid: eee17befde236d54c97732543dd6fba2, type: 2}
+  - {fileID: 11400000, guid: 9c1d6046398c7214faf1564299984eb0, type: 2}
+  - {fileID: 11400000, guid: f1d12ec87296ea945b04e3077dba85d1, type: 2}
+  - {fileID: 11400000, guid: 8ffff8b942641d840883ebf3beb3f87e, type: 2}
+  - {fileID: 11400000, guid: a449574ae367d334bb0412dd8be3d01d, type: 2}
+  - {fileID: 11400000, guid: 9582f831e451d744280b17e72b21d389, type: 2}
 --- !u!1 &1578420382
 GameObject:
   m_ObjectHideFlags: 0
