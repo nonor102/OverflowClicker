@@ -10,19 +10,12 @@ using System.Linq;
 public class SaveData
 {
     public double AlphaFactorForCalc;
-    public double AlphaFactorPerClick;
-    public double AlphaFactorMulti;
-    public double AlphaFactorExp;
     public bool IsAlphaOverflowCollapsed;
     public double AlphaOverflowCount;
 
     public bool IsArrivedBeta;
     public double BetaFactorForCalc;
     public double BetaNum;
-    public double BetaNumPerGain;
-    public double BetaFactorPerGain;
-    public double BetaFactorMulti;
-    public double BetaFactorExp;
     public bool IsBetaOverflowCollapsed;
     public double BetaOverflowCount;
 
@@ -33,17 +26,10 @@ public class SaveData
     public SaveData()
     {
         AlphaFactorForCalc = 0.0;
-        AlphaFactorPerClick = 1.0;
-        AlphaFactorMulti = 1.0;
-        AlphaFactorExp = 1.0;
         AlphaOverflowCount = 0.0;
 
         BetaFactorForCalc = 0.0;
         BetaNum = 0.0;
-        BetaNumPerGain = 1.0;
-        BetaFactorPerGain = 1.0;
-        BetaFactorMulti = 1.0;
-        BetaFactorExp = 1.0;
         BetaOverflowCount = 0.0;
     }
 }
@@ -134,19 +120,12 @@ public class SavePlayerData : MonoBehaviour
     private void SaveVariables(SaveData saveData, BetaUpgradeClassWrapper betaUpgradeClassWrapper) // ÉfÅ[É^ÇGameManagerÇ∆Ç©Ç©ÇÁÇ∆Ç¡ÇƒÇ≠ÇÈ
     {
         saveData.AlphaFactorForCalc = GameManager.Instance.AlphaFactorForCalc;
-        saveData.AlphaFactorPerClick = GameManager.Instance.AlphaFactorPerClick;
-        saveData.AlphaFactorMulti = GameManager.Instance.AlphaFactorMulti;
-        saveData.AlphaFactorExp = GameManager.Instance.AlphaFactorExp;
         saveData.IsAlphaOverflowCollapsed = GameManager.Instance.IsAlphaOverflowCollapsed;
         saveData.AlphaOverflowCount = GameManager.Instance.AlphaOverflowCount;
 
         saveData.IsArrivedBeta = GameManager.Instance.IsArrivedBeta;
         saveData.BetaFactorForCalc = GameManager.Instance.BetaFactorForCalc;
         saveData.BetaNum = GameManager.Instance.BetaNum;
-        saveData.BetaNumPerGain = GameManager.Instance.BetaNumPerGain;
-        saveData.BetaFactorPerGain = GameManager.Instance.BetaFactorPerGain;
-        saveData.BetaFactorMulti = GameManager.Instance.BetaFactorMulti;
-        saveData.BetaFactorExp = GameManager.Instance.BetaFactorExp;
         saveData.IsBetaOverflowCollapsed = GameManager.Instance.IsBetaOverflowCollapsed;
         saveData.BetaOverflowCount = GameManager.Instance.BetaOverflowCount;
 

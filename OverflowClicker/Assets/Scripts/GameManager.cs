@@ -53,19 +53,12 @@ public class GameManager : MonoBehaviour
     public void InitializeDataFromJson(SaveData saveData) // jsonのデータをいれる
     {
         AlphaFactorForCalc = saveData.AlphaFactorForCalc;
-        AlphaFactorPerClick = saveData.AlphaFactorPerClick;
-        AlphaFactorMulti = saveData.AlphaFactorMulti;
-        AlphaFactorExp = saveData.AlphaFactorExp;
         IsAlphaOverflowCollapsed = saveData.IsAlphaOverflowCollapsed;
         AlphaOverflowCount = saveData.AlphaOverflowCount;
 
         IsArrivedBeta = saveData.IsArrivedBeta;
         BetaFactorForCalc = saveData.BetaFactorForCalc;
         BetaNum = saveData.BetaNum;
-        BetaNumPerGain = saveData.BetaNumPerGain;
-        BetaFactorPerGain = saveData.BetaFactorPerGain;
-        BetaFactorMulti = saveData.BetaFactorMulti;
-        BetaFactorExp = saveData.BetaFactorExp;
         IsBetaOverflowCollapsed = saveData.IsBetaOverflowCollapsed;
         BetaOverflowCount = saveData.BetaOverflowCount;
 
@@ -77,27 +70,38 @@ public class GameManager : MonoBehaviour
 
     public void UpdateAlphaFactor()
     {
+        sbyte beforeValue = AlphaFactorForDisplay; // ボタンが押される前の値を代入しておく(オーバーフロー検知用)
         if (!IsAlphaOverflowCollapsed) // alphaのcollapseフラグが立っていないとき
         {
             if (AlphaFactorForDisplay >= 0)
             {
                 AddAlphaFactor();
             }
-            else
-            {
-                AlphaOverflowCount = 1;
-                AlphaFactorForCalc = 128; // オーバーフローすると表示上の値で-128に固定する
-            }
         }
         else
         {
-            sbyte beforeValue = AlphaFactorForDisplay; // ボタンが押される前の値を代入しておく(オーバーフロー検知用)
             AddAlphaFactor();
             AlphaFactorSyncer(); // AlphaFactorの値を更新しておく
             if (AlphaFactorForDisplay < 0 && beforeValue > 0) // AlphaFactorForDisplayの値が正の数から負の数へ変わったら
             {
                 AlphaOverflowCount++;
                 Debug.Log("Alpha Overflow: " + AlphaOverflowCount);
+            }
+        }
+        AlphaFactorSyncer();
+
+        if (!IsAlphaOverflowCollapsed)
+        {
+            if (AlphaFactorForDisplay < 0 && beforeValue >= 0)
+            {
+                AlphaOverflowCount = 1;
+                AlphaFactorForCalc = 128; // オーバーフローすると表示上の値で-128に固定する
+                Debug.Log("Alpha Overflowed");
+            }
+            else if (AlphaFactorForDisplay < 0)
+            {
+                AlphaOverflowCount = 1; // 固定
+                AlphaFactorForCalc = 128; // 固定
             }
         }
         AlphaFactorSyncer();

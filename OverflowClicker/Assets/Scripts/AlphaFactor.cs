@@ -43,18 +43,17 @@ public class AlphaFactor : MonoBehaviour
             alphaFactorText.text += "\n" + "(Overflow: " + GameManager.Instance.AlphaOverflowCount + ")";
         }
 
-        if(GameManager.Instance.AlphaOverflowCount == 0)
-        {
-            alpha2BetaButton.SetActive(false);
-        }
-
         if(GameManager.Instance.AlphaOverflowCount > 0)
         {
             alpha2BetaButton.SetActive(true);
             alpha2BetaText.text = "" + (short)Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) + "BF‚ðŠl“¾";
         }
+        else
+        {
+            alpha2BetaButton.SetActive(false);
+        }
 
-        if(BetaUpgradeManager.Instance.IsUpgrade0Completed == true)
+        if (BetaUpgradeManager.Instance.IsUpgrade0Completed == true)
         {
             displayFactorsButton.SetActive(true);
             nowFactorsPanel.GetComponentInChildren<TextMeshProUGUI>().text = "BF: " + GameManager.Instance.BetaFactorForDisplay + " ƒÀ: " + GameManager.Instance.BetaNum;
