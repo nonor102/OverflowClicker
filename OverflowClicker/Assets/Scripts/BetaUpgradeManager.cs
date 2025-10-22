@@ -10,6 +10,10 @@ public class BetaUpgradeManager : MonoBehaviour
     public bool IsUpgrade0Completed { get; private set; } = false; // 計算式の表示とかで使うフラグ
     public bool IsUpgrade5Completed { get; private set; } = false; // AF取得の自動化が解放されてるかフラグ
     public bool IsUpgrade6Completed { get; private set; } = false; // AlphaがCollapseしてるかフラグ
+    public bool IsUpgrade7Completed { get; private set; } = false; // 増幅タブがアンロックされてるかフラグ
+    public bool IsUpgrade8Completed { get; private set; } = false; // 試練タブがアンロックされてるかフラグ
+    public bool IsUpgrade9Completed { get; private set; } = false; // 銀行タブがアンロックされてるかフラグ
+    public bool IsUpgrade10Completed { get; private set; } = false; // 革命タブがアンロックされてるかフラグ
 
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
@@ -101,6 +105,18 @@ public class BetaUpgradeManager : MonoBehaviour
                 case 6:
                     IsUpgrade6Completed = true;
                     GameManager.Instance.CollapseAlpha();
+                    break;
+                case 7:
+                    IsUpgrade7Completed = true;
+                    break;
+                case 8:
+                    IsUpgrade8Completed = true;
+                    break;
+                case 9:
+                    IsUpgrade9Completed = true;
+                    break;
+                case 10:
+                    IsUpgrade10Completed = true;
                     break;
 
                 // どんどん追加していく...
