@@ -15,6 +15,6 @@ MonoBehaviour:
   upgradeID: 4
   title: "\u30AF\u30EA\u30C3\u30AF\u304C\u3081\u3093\u3069\u304F\u3055\u3044\u3063\u3066?"
   needBetaFactor: 5
-  description: "AF\u306E\u7372\u5F97\u91CF\u30925\u500D\u306B\u5F37\u5316"
+  description: "AF\u306E\u7372\u5F97\u91CF\u30923\u500D\u306B\u5F37\u5316"
   preRequiredUpgrade:
   - {fileID: 11400000, guid: 9c1d6046398c7214faf1564299984eb0, type: 2}

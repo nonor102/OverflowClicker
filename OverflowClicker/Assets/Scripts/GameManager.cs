@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     // sbyte用の定数、変数、乗数たち
     // sbyteはAF (Alpha Factor)という名前で管理する
-    public double AlphaFactorForCalc = 0; // 計算用のAF
+    public double AlphaFactorForCalc { get; private set; } = 0; // 計算用のAF
     public sbyte AlphaFactorForDisplay { get; private set; } = 0; // 表示用のAF
     public double AlphaFactorPerClick { get; private set; } = 1; // クリックごとの増加AF
     public double AlphaFactorMulti { get; private set; } = 1; // AF獲得乗数
@@ -21,13 +21,15 @@ public class GameManager : MonoBehaviour
     // short用の定数、変数、乗数たち
     // shortはBF (Beta Factor)という名前で管理する
     public bool IsArrivedBeta { get; private set; } = false; // Betaに到達したかフラグ
-    public double BetaFactorForCalc = 0; // 計算用のBF
+    public double BetaFactorForCalc { get; private set; } = 0; // 計算用のBF
     public short BetaFactorForDisplay { get; private set; } = 0; // 表示用のBF
     public double BetaNum { get; private set; } = 0; // alpha2betaの回数
     public double BetaNumPerGain {  get; private set; } = 1; // BetaNumを増やす数
     public double BetaFactorPerGain { get; private set; } = 1; // 取得するBFの基本の数
     public double BetaFactorMulti { get; private set; } = 1; // BF獲得乗数
     public double BetaFactorExp { get; private set; } = 1; // BF獲得指数
+    public double BetaFactorMultiFromUpgrade6 { get; private set; } = 1; // BetaUpgrade6でAlphaがCollapseし、BFの獲得数が増大するのでそれ用の変数
+    public double BetaFactorUsedInAmplification { get; private set; } = 0; // BetaUpgrade7で増幅タブがアンロックされ、そこで使われたBFの数を入れておく
     public bool IsBetaOverflowCollapsed { get; private set; } = false; // Betaのオーバーフローがcollapseしたかどうかフラグ
     public double BetaOverflowCount { get; private set; } = 0; // Betaがオーバーフローした回数
 
@@ -53,12 +55,14 @@ public class GameManager : MonoBehaviour
     public void InitializeDataFromJson(SaveData saveData) // jsonのデータをいれる
     {
         AlphaFactorForCalc = saveData.AlphaFactorForCalc;
+        AlphaFactorMulti = saveData.AlphaFactorMulti;
         IsAlphaOverflowCollapsed = saveData.IsAlphaOverflowCollapsed;
         AlphaOverflowCount = saveData.AlphaOverflowCount;
 
         IsArrivedBeta = saveData.IsArrivedBeta;
         BetaFactorForCalc = saveData.BetaFactorForCalc;
         BetaNum = saveData.BetaNum;
+        BetaFactorUsedInAmplification = saveData.BetaFactorUsedInAmplification;
         IsBetaOverflowCollapsed = saveData.IsBetaOverflowCollapsed;
         BetaOverflowCount = saveData.BetaOverflowCount;
 
@@ -89,6 +93,12 @@ public class GameManager : MonoBehaviour
             }
         }
         AlphaFactorSyncer();
+
+        if (BetaUpgradeManager.Instance.IsUpgrade6Completed) // 獲得できるBFの値を更新
+        {
+            AddBetaFactorMultiFromUpgrade6();
+            BetaFactorSyncer();
+        }
 
         if (!IsAlphaOverflowCollapsed)
         {
@@ -146,6 +156,10 @@ public class GameManager : MonoBehaviour
         IsArrivedBeta = true;
         AddBetaFactor();
         AddBetaNum();
+        if (BetaUpgradeManager.Instance.IsUpgrade11Completed)
+        {
+            AddBetaFactorPerGainByBetaNum(BetaNum);
+        }
         BetaFactorSyncer();
         AlphaFactorForCalc = 0;
         AlphaOverflowCount = 0;
@@ -155,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     public void AddBetaFactor() // BetaFactorの値を増加させる関数
     {
-        BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp); // (BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp という計算
+        BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6; // ((BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp) * BetaFactorMultiFromUpgrade6 という計算
     }
 
     public void SubBetaFactor(double num)
@@ -176,6 +190,18 @@ public class GameManager : MonoBehaviour
         Debug.Log("BetaNum: " + BetaNum);
     }
 
+    public void AddBetaFactorMultiFromUpgrade6() // BetaUpgrade6でBFの値を増加させる関数
+    {
+        BetaFactorMultiFromUpgrade6 = 1 + (0.001 * AlphaFactorForCalc) + (0.05 * AlphaOverflowCount);
+        Debug.Log("BetaFactorMultiFromUpgrade6: " + BetaFactorMultiFromUpgrade6);
+    }
+
+    public void AddBetaFactorUsedInAmplification(double num) // BetaUpgrade7で増幅タブで使ったBFの値を格納する関数
+    {
+        BetaFactorUsedInAmplification += num;
+        Debug.Log("BetaFactorUsedInAmplification: " + BetaFactorUsedInAmplification);
+    }
+
     public void AddBetaFactorPerGain(double num) // numの値をBetaFactorPerGainに掛けて値を上昇させる関数
     {
         BetaFactorPerGain *= num;
@@ -192,5 +218,11 @@ public class GameManager : MonoBehaviour
     {
         BetaFactorExp *= num;
         Debug.Log("BetaFactorExp: " + BetaFactorExp);
+    }
+
+    public void AddBetaFactorPerGainByBetaNum(double num) // Upgrade11でβの数でBetaFactorPerGainの値を増やす関数
+    {
+        BetaFactorPerGain += BetaNum * 0.1;
+        Debug.Log("BetaFactorPerGain: " + BetaFactorPerGain);
     }
 }

@@ -10,22 +10,29 @@ using System.Linq;
 public class SaveData
 {
     public double AlphaFactorForCalc;
+    public double AlphaFactorMulti;
     public bool IsAlphaOverflowCollapsed;
     public double AlphaOverflowCount;
 
     public bool IsArrivedBeta;
     public double BetaFactorForCalc;
     public double BetaNum;
+    public double BetaFactorUsedInAmplification;
     public bool IsBetaOverflowCollapsed;
     public double BetaOverflowCount;
 
     public bool IsUpgrade0Completed;
     public bool IsUpgrade5Completed;
     public bool IsUpgrade6Completed;
+    public bool IsUpgrade7Completed;
+    public bool IsUpgrade8Completed;
+    public bool IsUpgrade9Completed;
+    public bool IsUpgrade10Completed;
 
     public SaveData()
     {
         AlphaFactorForCalc = 0.0;
+        AlphaFactorMulti = 1.0;
         AlphaOverflowCount = 0.0;
 
         BetaFactorForCalc = 0.0;
@@ -120,18 +127,24 @@ public class SavePlayerData : MonoBehaviour
     private void SaveVariables(SaveData saveData, BetaUpgradeClassWrapper betaUpgradeClassWrapper) // データをGameManagerとかからとってくる
     {
         saveData.AlphaFactorForCalc = GameManager.Instance.AlphaFactorForCalc;
+        saveData.AlphaFactorMulti = GameManager.Instance.AlphaFactorMulti;
         saveData.IsAlphaOverflowCollapsed = GameManager.Instance.IsAlphaOverflowCollapsed;
         saveData.AlphaOverflowCount = GameManager.Instance.AlphaOverflowCount;
 
         saveData.IsArrivedBeta = GameManager.Instance.IsArrivedBeta;
         saveData.BetaFactorForCalc = GameManager.Instance.BetaFactorForCalc;
         saveData.BetaNum = GameManager.Instance.BetaNum;
+        saveData.BetaFactorUsedInAmplification = GameManager.Instance.BetaFactorUsedInAmplification;
         saveData.IsBetaOverflowCollapsed = GameManager.Instance.IsBetaOverflowCollapsed;
         saveData.BetaOverflowCount = GameManager.Instance.BetaOverflowCount;
 
         saveData.IsUpgrade0Completed = BetaUpgradeManager.Instance.IsUpgrade0Completed;
         saveData.IsUpgrade5Completed = BetaUpgradeManager.Instance.IsUpgrade5Completed;
         saveData.IsUpgrade6Completed = BetaUpgradeManager.Instance.IsUpgrade6Completed;
+        saveData.IsUpgrade7Completed = BetaUpgradeManager.Instance.IsUpgrade7Completed;
+        saveData.IsUpgrade8Completed = BetaUpgradeManager.Instance.IsUpgrade8Completed;
+        saveData.IsUpgrade9Completed = BetaUpgradeManager.Instance.IsUpgrade9Completed;
+        saveData.IsUpgrade10Completed = BetaUpgradeManager.Instance.IsUpgrade10Completed;
 
         // BetaUpgradeStatuses ディクショナリの中から、
         // 値(Value)が Completed であるものだけを抽出し(Where)、

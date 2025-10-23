@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba9e5e07a502b24aac093212b101023, type: 3}
+  m_Name: BetaUpgrade11
+  m_EditorClassIdentifier: 
+  upgradeID: 11
+  title: "\u03B2\u3067\u03B2\u3092\u5F37\u5316?"
+  needBetaFactor: 60
+  description: "\u73FE\u5728\u306E\u03B2\u306E\u6570\u3067BF\u306E\u7372\u5F97\u91CF\u3092\u5897\u52A0"
+  preRequiredUpgrade:
+  - {fileID: 11400000, guid: 8ffff8b942641d840883ebf3beb3f87e, type: 2}
+  - {fileID: 11400000, guid: c3441268ec47f854bb9ebc05e3ee687b, type: 2}

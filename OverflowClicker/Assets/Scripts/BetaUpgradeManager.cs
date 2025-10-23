@@ -14,6 +14,7 @@ public class BetaUpgradeManager : MonoBehaviour
     public bool IsUpgrade8Completed { get; private set; } = false; // 試練タブがアンロックされてるかフラグ
     public bool IsUpgrade9Completed { get; private set; } = false; // 銀行タブがアンロックされてるかフラグ
     public bool IsUpgrade10Completed { get; private set; } = false; // 革命タブがアンロックされてるかフラグ
+    public bool IsUpgrade11Completed { get; private set; } = false; // βでβを強化がアンロックされてるかフラグ
 
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
@@ -97,7 +98,7 @@ public class BetaUpgradeManager : MonoBehaviour
                     GameManager.Instance.AddBetaFactorPerGain(1.5); // BF獲得量1.5倍
                     break;
                 case 4:
-                    GameManager.Instance.AddAlphaFactorPerClick(5); // AF獲得量5倍
+                    GameManager.Instance.AddAlphaFactorPerClick(3); // AF獲得量3倍
                     break;
                 case 5:
                     IsUpgrade5Completed = true;
@@ -117,6 +118,9 @@ public class BetaUpgradeManager : MonoBehaviour
                     break;
                 case 10:
                     IsUpgrade10Completed = true;
+                    break;
+                case 11:
+                    IsUpgrade11Completed = true;
                     break;
 
                 // どんどん追加していく...
