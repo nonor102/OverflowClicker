@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MissionStatus
+public enum BetaMissionStatus
 {
     Locked, // ロック中
     Available, // 挑戦可能
@@ -17,4 +17,7 @@ public class BetaMission : ScriptableObject
     public int missionID; // 試練のID
     [TextArea]
     public string discription; // 説明文
+
+    [Header("前提条件")]
+    public BetaMission preRequiredMissions; // 前提条件(これを満たさないと状態をLockedに、満たすとAvailableに)
 }

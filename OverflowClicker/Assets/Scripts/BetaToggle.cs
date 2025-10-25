@@ -41,17 +41,17 @@ public class BetaToggle : MonoBehaviour
         if (BetaUpgradeManager.Instance.IsUpgrade8Completed)
         {
             mission.interactable = true;
-            amplificationText.text = "—û";
+            missionText.text = "—û";
         }
         if (BetaUpgradeManager.Instance.IsUpgrade9Completed)
         {
             bank.interactable = true;
-            amplificationText.text = "‹âs";
+            bankText.text = "‹âs";
         }
         if (BetaUpgradeManager.Instance.IsUpgrade10Completed)
         {
             revolution.interactable = true;
-            amplificationText.text = "Šv–½";
+            revolutionText.text = "Šv–½";
         }
         
         

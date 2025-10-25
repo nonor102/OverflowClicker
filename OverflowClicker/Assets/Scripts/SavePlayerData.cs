@@ -28,6 +28,9 @@ public class SaveData
     public bool IsUpgrade8Completed;
     public bool IsUpgrade9Completed;
     public bool IsUpgrade10Completed;
+    public bool IsUpgrade11Completed;
+
+    public int LatestCompletedMissionID;
 
     public SaveData()
     {
@@ -38,6 +41,8 @@ public class SaveData
         BetaFactorForCalc = 0.0;
         BetaNum = 0.0;
         BetaOverflowCount = 0.0;
+
+        LatestCompletedMissionID = 0;
     }
 }
 
@@ -83,6 +88,7 @@ public class SavePlayerData : MonoBehaviour
             Save();
         }
         GameManager.Instance.InitializeDataFromJson(Data);
+        BetaMissionManager.Instance.SetMissionsFromSaveData(Data);
 
         BetaUpgradeManager.Instance.InitializeFromSaveData(BetaWrapper.CompleteBetaUpgradeIDs);
     }
@@ -145,6 +151,8 @@ public class SavePlayerData : MonoBehaviour
         saveData.IsUpgrade8Completed = BetaUpgradeManager.Instance.IsUpgrade8Completed;
         saveData.IsUpgrade9Completed = BetaUpgradeManager.Instance.IsUpgrade9Completed;
         saveData.IsUpgrade10Completed = BetaUpgradeManager.Instance.IsUpgrade10Completed;
+
+        saveData.LatestCompletedMissionID = BetaMissionManager.Instance.LatestCompletedMissionID;
 
         // BetaUpgradeStatuses ディクショナリの中から、
         // 値(Value)が Completed であるものだけを抽出し(Where)、
