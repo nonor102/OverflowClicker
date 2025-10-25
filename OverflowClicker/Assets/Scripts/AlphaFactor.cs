@@ -45,10 +45,14 @@ public class AlphaFactor : MonoBehaviour
 
         if(GameManager.Instance.AlphaOverflowCount > 0)
         {
+            if (BetaUpgradeManager.Instance.IsUpgrade11Completed)
+            {
+                GameManager.Instance.AddBetaFactorMultiFromUpgrade11ByBetaNum(GameManager.Instance.BetaNum);
+            }
             alpha2BetaButton.SetActive(true);
             alpha2BetaText.text = ""
-                + (short)(Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) * GameManager.Instance.BetaFactorMultiFromUpgrade6)
-                + "BF‚ðŠl“¾";
+                                  + (short)(Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) * GameManager.Instance.BetaFactorMultiFromUpgrade6 * GameManager.Instance.BetaFactorMultiFromUpgrade11)
+                                  + "BF‚ðŠl“¾";
         }
         else
         {
@@ -60,7 +64,7 @@ public class AlphaFactor : MonoBehaviour
             displayFactorsButton.SetActive(true);
             nowFactorsPanel.GetComponentInChildren<TextMeshProUGUI>().text = "BF: " + GameManager.Instance.BetaFactorForDisplay + " ƒÀ: " + GameManager.Instance.BetaNum;
             displayAFEquationButton.SetActive(true);
-            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AF‚ÌŒvŽZŽ®: \n" + "(" + GameManager.Instance.AlphaFactorPerClick + " * " + GameManager.Instance.AlphaFactorMulti + ") ^ " + GameManager.Instance.AlphaFactorExp;
+            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AF‚ÌŒvŽZŽ®: \n" + "(" + $"{GameManager.Instance.AlphaFactorPerClick:F2}" + " * " + $"{GameManager.Instance.AlphaFactorMulti:F2}" + ") ^ " + GameManager.Instance.AlphaFactorExp;
         }
     }
 }

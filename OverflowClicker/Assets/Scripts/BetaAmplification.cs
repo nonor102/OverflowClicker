@@ -24,22 +24,37 @@ public class BetaAmplification : MonoBehaviour
         {
             if (GameManager.Instance.BetaFactorUsedInAmplification > 10000)
             {
-                AFAmplifyNum += num * 0.0001;
+                AFAmplifyNum += num * 0.00001;
                 num -= 10000;
             }
-            else if (GameManager.Instance.BetaFactorUsedInAmplification > 1000 && GameManager.Instance.BetaFactorUsedInAmplification <= 10000)
+            else if (GameManager.Instance.BetaFactorUsedInAmplification > 5000 && GameManager.Instance.BetaFactorUsedInAmplification <= 10000)
             {
-                AFAmplifyNum += num * 0.001;
+                AFAmplifyNum += num * 0.00005;
+                num -= 5000;
+            }
+            else if (GameManager.Instance.BetaFactorUsedInAmplification > 1000 && GameManager.Instance.BetaFactorUsedInAmplification <= 5000)
+            {
+                AFAmplifyNum += num * 0.0001;
                 num -= 1000;
             }
-            else if(GameManager.Instance.BetaFactorUsedInAmplification > 100 &&  GameManager.Instance.BetaFactorUsedInAmplification <= 1000)
+            else if (GameManager.Instance.BetaFactorUsedInAmplification > 500 && GameManager.Instance.BetaFactorUsedInAmplification <= 1000)
             {
-                AFAmplifyNum += num * 0.01;
+                AFAmplifyNum += num * 0.0005;
+                num -= 500;
+            }
+            else if (GameManager.Instance.BetaFactorUsedInAmplification > 100 && GameManager.Instance.BetaFactorUsedInAmplification <= 500)
+            {
+                AFAmplifyNum += num * 0.001;
                 num -= 100;
             }
-            else if(GameManager.Instance.BetaFactorUsedInAmplification >= 0 && GameManager.Instance.BetaFactorUsedInAmplification <= 100)
+            else if(GameManager.Instance.BetaFactorUsedInAmplification > 50 &&  GameManager.Instance.BetaFactorUsedInAmplification <= 100)
             {
-                AFAmplifyNum += num + 0.1;
+                AFAmplifyNum += num * 0.005;
+                num -= 50;
+            }
+            else if(GameManager.Instance.BetaFactorUsedInAmplification >= 0 && GameManager.Instance.BetaFactorUsedInAmplification <= 50)
+            {
+                AFAmplifyNum += num * 0.01;
                 num -= 10;
             }
         }
@@ -47,7 +62,7 @@ public class BetaAmplification : MonoBehaviour
 
     private void ShowDetails()
     {
-        UsedBFAndAFMultiText.text = "¡‚Ü‚Å‚É" + GameManager.Instance.BetaFactorUsedInAmplification + "BF‚ðŽg—p" + "\n" + GameManager.Instance.AlphaFactorMulti + "”{‚ÌAF‚ðŠl“¾’†";
+        UsedBFAndAFMultiText.text = "¡‚Ü‚Å‚É" + GameManager.Instance.BetaFactorUsedInAmplification + "BF‚ðŽg—p" + "\n" + $"{GameManager.Instance.AlphaFactorMulti:F2}" + "”{‚ÌAF‚ðŠl“¾’†";
     }
 
     public void OnSubmit()

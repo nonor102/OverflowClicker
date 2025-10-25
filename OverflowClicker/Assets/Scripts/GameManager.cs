@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public double BetaFactorExp { get; private set; } = 1; // BF獲得指数
     public double BetaFactorMultiFromUpgrade6 { get; private set; } = 1; // BetaUpgrade6でAlphaがCollapseし、BFの獲得数が増大するのでそれ用の変数
     public double BetaFactorUsedInAmplification { get; private set; } = 0; // BetaUpgrade7で増幅タブがアンロックされ、そこで使われたBFの数を入れておく
+    public double BetaFactorMultiFromUpgrade11 { get; private set; } = 1; // BetaUpgrade11でβでBF獲得量が増えるので、それ用の変数
     public bool IsBetaOverflowCollapsed { get; private set; } = false; // Betaのオーバーフローがcollapseしたかどうかフラグ
     public double BetaOverflowCount { get; private set; } = 0; // Betaがオーバーフローした回数
 
@@ -156,10 +157,6 @@ public class GameManager : MonoBehaviour
         IsArrivedBeta = true;
         AddBetaFactor();
         AddBetaNum();
-        if (BetaUpgradeManager.Instance.IsUpgrade11Completed)
-        {
-            AddBetaFactorPerGainByBetaNum(BetaNum);
-        }
         BetaFactorSyncer();
         AlphaFactorForCalc = 0;
         AlphaOverflowCount = 0;
@@ -169,7 +166,7 @@ public class GameManager : MonoBehaviour
 
     public void AddBetaFactor() // BetaFactorの値を増加させる関数
     {
-        BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6; // ((BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp) * BetaFactorMultiFromUpgrade6 という計算
+        BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11; // ((BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11 という計算
     }
 
     public void SubBetaFactor(double num)
@@ -192,7 +189,7 @@ public class GameManager : MonoBehaviour
 
     public void AddBetaFactorMultiFromUpgrade6() // BetaUpgrade6でBFの値を増加させる関数
     {
-        BetaFactorMultiFromUpgrade6 = 1 + (0.001 * AlphaFactorForCalc) + (0.05 * AlphaOverflowCount);
+        BetaFactorMultiFromUpgrade6 = 1 + (0.002 * AlphaFactorForCalc) + (0.5 * AlphaOverflowCount);
         Debug.Log("BetaFactorMultiFromUpgrade6: " + BetaFactorMultiFromUpgrade6);
     }
 
@@ -220,9 +217,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("BetaFactorExp: " + BetaFactorExp);
     }
 
-    public void AddBetaFactorPerGainByBetaNum(double num) // Upgrade11でβの数でBetaFactorPerGainの値を増やす関数
+    public void AddBetaFactorMultiFromUpgrade11ByBetaNum(double num) // Upgrade11でβの数でBetaFactorPerGainの値を増やす関数
     {
-        BetaFactorPerGain += BetaNum * 0.1;
-        Debug.Log("BetaFactorPerGain: " + BetaFactorPerGain);
+        BetaFactorMultiFromUpgrade11 = 1 + BetaNum * 0.01;
+        Debug.Log("BetaFactorMultiFromUpgrade11: " + BetaFactorMultiFromUpgrade11);
     }
 }
