@@ -30,9 +30,9 @@ public class BetaMissionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.Instance.AddBetaFactorMulti(LatestCompletedMissionID + 1); // セーブデータには保存しないので、ここで適用しておく
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -92,7 +92,8 @@ public class BetaMissionManager : MonoBehaviour
         Debug.Log("LatestCompletedMissionID: " + LatestCompletedMissionID);
         for (int i = 0; i < missionID; i++)
         {
-            BetaMissionsStatuses[i] = BetaMissionStatus.Completed; // 渡されたIDまでCompletedにしとく (データのセーブと互換性を持たせたいだけ)
+            BetaMissionsStatuses[i + 1] = BetaMissionStatus.Completed; // 渡されたIDまでCompletedにしとく (データのセーブと互換性を持たせたいだけ)
+            Debug.Log("Mission Completed: " +(i + 1));
         }
 
         if (BetaMissionsStatuses.ContainsKey(missionID + 1)) // 試練No.1~9まで
@@ -129,6 +130,8 @@ public class BetaMissionManager : MonoBehaviour
                     GameManager.Instance.ResetAlpha();
                     GameManager.Instance.AddAlphaFactorPerClick(0.01); // クリックごとに得られるAFの獲得量を1%に制限
                     break;
+                case 2:
+
 
                 //以下に追記していく
                 default:

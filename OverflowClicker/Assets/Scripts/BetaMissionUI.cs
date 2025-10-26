@@ -11,20 +11,28 @@ public class BetaMissionUI : MonoBehaviour
     [SerializeField] private List<Button> MissionList = new(); // 試練のボタンいれとく
     [SerializeField] private List<TextMeshProUGUI> MissionTitles = new(); // 試練のタイトルに追記するテキスト用のtmpいれる
     [SerializeField] private List<TextMeshProUGUI> MissionDescriptions = new(); // 試練の説明用のtmpいれる
+    [SerializeField] private TextMeshProUGUI BetaMissionDescriptionText; // 試練画面の説明テキスト
     [SerializeField] private Sprite LockPic; // 錠前の画像
     [SerializeField] private Sprite AvailablePic; // 普通の時の画像
 
     private void Start()
     {
-        foreach (var item in BetaMissionManager.Instance.allMissions) 
+        
+    }
+
+    private void Update()
+    {
+        foreach (var item in BetaMissionManager.Instance.allMissions)
         {
             ColorChange(item);
         }
+
+        BetaMissionDescriptionText.text = "今までの試練のクリア数: " + BetaMissionManager.Instance.LatestCompletedMissionID + "\n" + "現在、試練により" + (BetaMissionManager.Instance.LatestCompletedMissionID + 1) + "倍のBFを獲得中";
     }
 
     public void OnButtonClicked(BetaMission betaMission) // ボタン処理
     {
-        if (BetaMissionManager.Instance.GetBetaMissionStatus(betaMission.missionID) == BetaMissionStatus.Available || BetaMissionManager.Instance.GetBetaMissionStatus(betaMission.missionID) == BetaMissionStatus.Completed) // 挑戦可能、達成済みなら
+        if (BetaMissionManager.Instance.GetBetaMissionStatus(betaMission.missionID) == BetaMissionStatus.Available) // 挑戦可能なら
         {
             BetaMissionManager.Instance.EnterOrExitBetaMission(betaMission.missionID, true); // 挑戦
         }
@@ -83,7 +91,7 @@ public class BetaMissionUI : MonoBehaviour
             buttonImage.color = Color.green; // 完了なら緑色
             titleText.text = "試練 No." + betaMission.missionID + " (完了)"; // "(完了)"と追記
             descriptionText.text = betaMission.description; // 説明文を設定
-            missionButton.interactable = true; // 押せるように
+            missionButton.interactable = false; // 押せないようにしとく
         }
         else
         {
