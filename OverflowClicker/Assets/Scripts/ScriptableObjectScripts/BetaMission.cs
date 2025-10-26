@@ -15,8 +15,9 @@ public class BetaMission : ScriptableObject
 {
     [Header("—û‚Ìî•ñ")]
     public int missionID; // —û‚ÌID
+
     [TextArea]
-    public string discription; // à–¾•¶
+    public string description; // à–¾•¶
 
     [Header("‘O’ñğŒ")]
     public BetaMission preRequiredMissions; // ‘O’ñğŒ(‚±‚ê‚ğ–‚½‚³‚È‚¢‚Æó‘Ô‚ğLocked‚ÉA–‚½‚·‚ÆAvailable‚É)

@@ -47,7 +47,7 @@ public class AlphaFactor : MonoBehaviour
         {
             if (BetaUpgradeManager.Instance.IsUpgrade11Completed)
             {
-                GameManager.Instance.AddBetaFactorMultiFromUpgrade11ByBetaNum(GameManager.Instance.BetaNum);
+                GameManager.Instance.AddBetaFactorMultiFromUpgrade11ByBetaNum();
             }
             alpha2BetaButton.SetActive(true);
             alpha2BetaText.text = ""

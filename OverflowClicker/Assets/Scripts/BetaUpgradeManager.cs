@@ -18,7 +18,7 @@ public class BetaUpgradeManager : MonoBehaviour
 
     public List<BetaUpgrade> allUpgrades; // ゲーム内に存在する全ての強化のアセットを登録
 
-    public Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses { get; private set; } = new Dictionary<int, BetaUpgradeStatus>(); // 各強化の現在の状態を保存するDictionary
+    public Dictionary<int, BetaUpgradeStatus> BetaUpgradeStatuses { get; private set; } = new(); // 各強化の現在の状態を保存するDictionary
 
     private void Awake()
     {
@@ -42,12 +42,12 @@ public class BetaUpgradeManager : MonoBehaviour
             if (upgrade.preRequiredUpgrade == null || upgrade.preRequiredUpgrade.Count == 0)
             {
                 BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Available; // 前提条件がない強化は最初から強化可能
-                Debug.Log("Available: " +  upgrade.upgradeID);
+                Debug.Log("Available Upgrade: " +  upgrade.upgradeID);
             }
             else
             {
                 BetaUpgradeStatuses[upgrade.upgradeID] = BetaUpgradeStatus.Locked; // それ以外は未開放状態
-                Debug.Log("Locked: " + upgrade.upgradeID);
+                Debug.Log("Locked Upgrade: " + upgrade.upgradeID);
             }
         }
     }

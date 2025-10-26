@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     // short用の定数、変数、乗数たち
     // shortはBF (Beta Factor)という名前で管理する
     public bool IsArrivedBeta { get; private set; } = false; // Betaに到達したかフラグ
+    public bool IsAlpha2BetaExecuted { get; private set; } = false; // A2Bが実行されたか (BetaMissionで使用する)
     public double BetaFactorForCalc { get; private set; } = 0; // 計算用のBF
     public short BetaFactorForDisplay { get; private set; } = 0; // 表示用のBF
     public double BetaNum { get; private set; } = 0; // alpha2betaの回数
@@ -155,13 +156,25 @@ public class GameManager : MonoBehaviour
     public void Alpha2Beta() // alphaをリセットしてbetaを取得する関数
     {
         IsArrivedBeta = true;
+        IsAlpha2BetaExecuted = true;
         AddBetaFactor();
         AddBetaNum();
         BetaFactorSyncer();
+        ResetAlpha();
+        Debug.Log("alpha2beta");
+    }
+
+    public void ResetA2BExecutedFlag()
+    {
+        IsAlpha2BetaExecuted = false; // フラグ下げる
+    }
+
+    public void ResetAlpha() // AFとAlphaOverflowを0にする関数
+    {
         AlphaFactorForCalc = 0;
         AlphaOverflowCount = 0;
         AlphaFactorSyncer();
-        Debug.Log("alpha2beta");
+        Debug.Log("reset alpha");
     }
 
     public void AddBetaFactor() // BetaFactorの値を増加させる関数
@@ -217,7 +230,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("BetaFactorExp: " + BetaFactorExp);
     }
 
-    public void AddBetaFactorMultiFromUpgrade11ByBetaNum(double num) // Upgrade11でβの数でBetaFactorPerGainの値を増やす関数
+    public void AddBetaFactorMultiFromUpgrade11ByBetaNum() // Upgrade11でβの数でBetaFactorPerGainの値を増やす関数
     {
         BetaFactorMultiFromUpgrade11 = 1 + BetaNum * 0.01;
         Debug.Log("BetaFactorMultiFromUpgrade11: " + BetaFactorMultiFromUpgrade11);

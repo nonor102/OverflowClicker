@@ -67,7 +67,7 @@ public class BetaUpgradePopUpUI : MonoBehaviour
         {
             if(BetaUpgradeManager.Instance.GetBetaUpgradeStatus(upgrade.upgradeID) == BetaUpgradeStatus.Available) // Available‚Ì‚Æ‚«‚É‚¾‚¯Œx•¶‚ğo‚µ‚Ä‚é
             {
-                descriptionText.text = upgrade.description + "\n" + "BF‚ª‘«‚è‚Ü‚¹‚ñ!";
+                descriptionText.text = "BF‚ª‘«‚è‚Ü‚¹‚ñ!";
             }
         }
     }
