@@ -153,4 +153,15 @@ public class BetaUpgradeManager : MonoBehaviour
             }
         }
     }
+
+    public void DisableFlagsAndMultiEtc() // BetaMission‚Åg—p
+    {
+        GameManager.Instance.AlphaFactorPerClickDecreaser(1.1); // BetaUpgrade0‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        GameManager.Instance.AlphaFactorPerClickDecreaser(1.2); //BetaUpgrade1‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        GameManager.Instance.BetaFactorPerGainDecreaser(1.2); // BetaUpgrade2‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        GameManager.Instance.BetaFactorPerGainDecreaser(1.5); // BetaUpgrade3‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        GameManager.Instance.AlphaFactorPerClickDecreaser(3); // BetaUpgrade4‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        IsUpgrade5Completed = false; // BetaUpgrade5‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+        IsUpgrade11Completed = false; // BetaUpgrade11‚ÌŒø‰Ê‚ğ‘Å‚¿Á‚·
+    }
 }

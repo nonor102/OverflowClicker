@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
     public void InitializeDataFromJson(SaveData saveData) // jsonのデータをいれる
     {
         AlphaFactorForCalc = saveData.AlphaFactorForCalc;
-        AlphaFactorMulti = saveData.AlphaFactorMulti;
         IsAlphaOverflowCollapsed = saveData.IsAlphaOverflowCollapsed;
         AlphaOverflowCount = saveData.AlphaOverflowCount;
 
@@ -130,6 +129,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("AlphaFactorPerCiick: " + AlphaFactorPerClick);
     }
 
+    public void SetAlphaFactorMultiFromBetaAmplification(double num)
+    {
+        AlphaFactorMulti = num;
+        Debug.Log("AlphaFactorMulti: " + AlphaFactorMulti);
+    }
+
     public void AddAlphaFactorMulti(double num) // numの値をAlphaFactorMultiに掛けて値を上昇させる関数
     {
         AlphaFactorMulti *= num;
@@ -175,6 +180,37 @@ public class GameManager : MonoBehaviour
         AlphaOverflowCount = 0;
         AlphaFactorSyncer();
         Debug.Log("reset alpha");
+    }
+
+    public void AlphaFactorDecreaser(double num) // BetaMission用の関数、AF獲得量を減らす
+    {
+        AlphaFactorForCalc /= num;
+        if(AlphaFactorForCalc < 0)
+        {
+            AlphaFactorForCalc = 0; // 負の数にならないようにする
+        }
+        AlphaFactorSyncer();
+    }
+
+    public void AlphaFactorGainDisabled() // BetaMission用の関数、AFの獲得量を1にする
+    {
+        AlphaFactorPerClick = 1;
+        AlphaFactorMulti = 1;
+    }
+
+    public void AlphaFactorPerClickDecreaser(double num) // BetaMission用の関数、AFのクリックで得られる獲得量を減らす
+    {
+        AlphaFactorPerClick /= num;
+    }
+
+    public void AlphaFactorMultiDisabled() // BetaMission用の関数、AF獲得乗数を1にする
+    {
+        AlphaFactorMulti = 1;
+    }
+
+    public void AlphaFactorMultiDecreaser(double num)
+    {
+        AlphaFactorMulti /= num;
     }
 
     public void AddBetaFactor() // BetaFactorの値を増加させる関数
@@ -234,5 +270,20 @@ public class GameManager : MonoBehaviour
     {
         BetaFactorMultiFromUpgrade11 = 1 + BetaNum * 0.01;
         Debug.Log("BetaFactorMultiFromUpgrade11: " + BetaFactorMultiFromUpgrade11);
+    }
+
+    public void CollapseBeta() // IsBetaOverflowCollapsedをTに変更する関数
+    {
+        IsBetaOverflowCollapsed = true;
+    }
+
+    public void BetaFactorPerGainDecreaser(double num) // BetaMission用の関数、BFの基本獲得量を減らす
+    {
+        BetaFactorPerGain /= num;
+    }
+
+    public void BetaFactorMultiDisabled() // BetaMission用の関数、BF獲得乗数を1にする
+    {
+        BetaFactorMulti = 1;
     }
 }

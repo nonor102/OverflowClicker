@@ -10,7 +10,6 @@ using System.Linq;
 public class SaveData
 {
     public double AlphaFactorForCalc;
-    public double AlphaFactorMulti;
     public bool IsAlphaOverflowCollapsed;
     public double AlphaOverflowCount;
 
@@ -35,7 +34,6 @@ public class SaveData
     public SaveData()
     {
         AlphaFactorForCalc = 0.0;
-        AlphaFactorMulti = 1.0;
         AlphaOverflowCount = 0.0;
 
         BetaFactorForCalc = 0.0;
@@ -133,7 +131,6 @@ public class SavePlayerData : MonoBehaviour
     private void SaveVariables(SaveData saveData, BetaUpgradeClassWrapper betaUpgradeClassWrapper) // ÉfÅ[É^ÇGameManagerÇ∆Ç©Ç©ÇÁÇ∆Ç¡ÇƒÇ≠ÇÈ
     {
         saveData.AlphaFactorForCalc = GameManager.Instance.AlphaFactorForCalc;
-        saveData.AlphaFactorMulti = GameManager.Instance.AlphaFactorMulti;
         saveData.IsAlphaOverflowCollapsed = GameManager.Instance.IsAlphaOverflowCollapsed;
         saveData.AlphaOverflowCount = GameManager.Instance.AlphaOverflowCount;
 

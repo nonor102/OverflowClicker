@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: BetaMission5
   m_EditorClassIdentifier: 
   missionID: 5
-  description: 
+  description: "\u5F37\u5316\u3092\u7121\u52B9\u5316 (\u4E00\u90E8\u6A5F\u80FD\u306F\u4F7F\u7528\u53EF\u80FD)\n\u9054\u6210\u6761\u4EF6:
+    1\u56DE\u30671000\u4EE5\u4E0A\u306EBF\u3092\u7372\u5F97"
   preRequiredMissions: {fileID: 11400000, guid: 7559084b98adfd3469c0e8580b5449f9, type: 2}

@@ -17,6 +17,9 @@ public class AlphaFactor : MonoBehaviour
     [SerializeField] private GameObject displayFactorsButton;
     [SerializeField] private GameObject nowFactorsPanel;
 
+    private double displayAlpfaFactor; // ボタンに表示する用のAF
+    private double displayBetaFactor; // ボタンに表示する用のBF
+
     public void OnAlphaFactorButtonClicked()
     {
         GameManager.Instance.UpdateAlphaFactor();
@@ -35,8 +38,15 @@ public class AlphaFactor : MonoBehaviour
 
     void Update()
     {
-        alphaFactorGainText.text = "" + (sbyte)Math.Pow((GameManager.Instance.AlphaFactorPerClick * GameManager.Instance.AlphaFactorMulti), GameManager.Instance.AlphaFactorExp) + "AFを獲得";
-
+        displayAlpfaFactor = Math.Pow((GameManager.Instance.AlphaFactorPerClick * GameManager.Instance.AlphaFactorMulti), GameManager.Instance.AlphaFactorExp);
+        if (displayAlpfaFactor < 100) // ボタンに表示用のAFが100以下なら小数点以下2桁まで表示
+        {
+            alphaFactorGainText.text = "" + $"{displayAlpfaFactor:F2}" + "AFを獲得";
+        }
+        else
+        {
+            alphaFactorGainText.text = "" + displayAlpfaFactor + "AFを獲得";
+        }
         alphaFactorText.text = "AF: " + GameManager.Instance.AlphaFactorForDisplay;
         if (GameManager.Instance.IsAlphaOverflowCollapsed && GameManager.Instance.AlphaOverflowCount > 0)
         {
@@ -49,10 +59,16 @@ public class AlphaFactor : MonoBehaviour
             {
                 GameManager.Instance.AddBetaFactorMultiFromUpgrade11ByBetaNum();
             }
+            displayBetaFactor = Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) * GameManager.Instance.BetaFactorMultiFromUpgrade6 * GameManager.Instance.BetaFactorMultiFromUpgrade11;
             alpha2BetaButton.SetActive(true);
-            alpha2BetaText.text = ""
-                                  + (short)(Math.Pow((GameManager.Instance.BetaFactorPerGain * GameManager.Instance.BetaFactorMulti), GameManager.Instance.BetaFactorExp) * GameManager.Instance.BetaFactorMultiFromUpgrade6 * GameManager.Instance.BetaFactorMultiFromUpgrade11)
-                                  + "BFを獲得";
+            if(displayBetaFactor < 100) // ボタンに表示用のBFが100以下なら小数点以下2桁まで表示
+            {
+                alpha2BetaText.text = "" + $"{displayBetaFactor:F2}" + "BFを獲得";
+            }
+            else
+            {
+                alpha2BetaText.text = "" + displayBetaFactor + "BFを獲得";
+            }
         }
         else
         {
