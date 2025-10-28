@@ -80,7 +80,7 @@ public class AlphaFactor : MonoBehaviour
             displayFactorsButton.SetActive(true);
             nowFactorsPanel.GetComponentInChildren<TextMeshProUGUI>().text = "BF: " + GameManager.Instance.BetaFactorForDisplay + " ƒÀ: " + GameManager.Instance.BetaNum;
             displayAFEquationButton.SetActive(true);
-            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AF‚ÌŒvŽZŽ®: \n" + "(" + $"{GameManager.Instance.AlphaFactorPerClick:F2}" + " * " + $"{GameManager.Instance.AlphaFactorMulti:F2}" + ") ^ " + GameManager.Instance.AlphaFactorExp;
+            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AF‚ÌŒvŽZŽ®: \n" + "(" + $"{GameManager.Instance.AlphaFactorPerClick:F2}" + " * " + $"{GameManager.Instance.AlphaFactorMulti:F2}" + ") ^ " + $"{GameManager.Instance.AlphaFactorExp:F2}";
         }
     }
 }
