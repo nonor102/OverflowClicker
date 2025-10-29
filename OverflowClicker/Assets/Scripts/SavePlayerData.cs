@@ -31,6 +31,9 @@ public class SaveData
 
     public int LatestCompletedMissionID;
 
+    public double BetaBankAmount;
+    public double BetaBankInterestRate;
+
     public SaveData()
     {
         AlphaFactorForCalc = 0.0;
@@ -41,6 +44,9 @@ public class SaveData
         BetaOverflowCount = 0.0;
 
         LatestCompletedMissionID = 0;
+
+        BetaBankAmount = 0.0;
+        BetaBankInterestRate = 0.0001;
     }
 }
 
@@ -86,9 +92,9 @@ public class SavePlayerData : MonoBehaviour
             Save();
         }
         GameManager.Instance.InitializeDataFromJson(Data);
-        BetaMissionManager.Instance.SetMissionsFromSaveData(Data);
-
         BetaUpgradeManager.Instance.InitializeFromSaveData(BetaWrapper.CompleteBetaUpgradeIDs);
+        BetaMissionManager.Instance.SetMissionsFromSaveData(Data);
+        BetaBankManager.Instance.InitializeFromSaveData(Data.BetaBankAmount, Data.BetaBankInterestRate);
     }
 
     private void Save() // json‚É‚·‚é
@@ -159,5 +165,8 @@ public class SavePlayerData : MonoBehaviour
             .Where(pair => pair.Value == BetaUpgradeStatus.Completed)
             .Select(pair => pair.Key)
             .ToList();
+
+        saveData.BetaBankAmount = BetaBankManager.Instance.CurrentBetaBankAmount;
+        saveData.BetaBankInterestRate = BetaBankManager.Instance.InterestRate;
     }
 }

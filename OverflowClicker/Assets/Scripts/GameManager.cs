@@ -218,6 +218,12 @@ public class GameManager : MonoBehaviour
         BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11; // ((BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11 Ç∆Ç¢Ç§åvéZ
     }
 
+    public void AddBetaFactorFromBank(double num) // ã‚çsÇ©ÇÁBFÇí«â¡Ç∑ÇÈä÷êî
+    {
+        BetaFactorForCalc += num;
+        BetaFactorSyncer();
+    }
+
     public void SubBetaFactor(double num)
     {
         BetaFactorForCalc -= num;
