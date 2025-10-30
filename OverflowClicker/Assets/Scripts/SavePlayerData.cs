@@ -10,12 +10,15 @@ using System.Linq;
 public class SaveData
 {
     public double AlphaFactorForCalc;
+    public double AlphaFactorExp;
     public bool IsAlphaOverflowCollapsed;
     public double AlphaOverflowCount;
 
     public bool IsArrivedBeta;
+    public double AllBFGetInThisTerm;
     public double BetaFactorForCalc;
     public double BetaNum;
+    public double BetaFactorExp;
     public double BetaFactorUsedInAmplification;
     public bool IsBetaOverflowCollapsed;
     public double BetaOverflowCount;
@@ -38,9 +41,13 @@ public class SaveData
     {
         AlphaFactorForCalc = 0.0;
         AlphaOverflowCount = 0.0;
+        AlphaFactorExp = 1.0;
 
+        AllBFGetInThisTerm = 0.0;
         BetaFactorForCalc = 0.0;
         BetaNum = 0.0;
+        BetaFactorExp = 1.0;
+        BetaFactorUsedInAmplification = 0.0;
         BetaOverflowCount = 0.0;
 
         LatestCompletedMissionID = 0;
@@ -137,12 +144,15 @@ public class SavePlayerData : MonoBehaviour
     private void SaveVariables(SaveData saveData, BetaUpgradeClassWrapper betaUpgradeClassWrapper) // ÉfÅ[É^ÇGameManagerÇ∆Ç©Ç©ÇÁÇ∆Ç¡ÇƒÇ≠ÇÈ
     {
         saveData.AlphaFactorForCalc = GameManager.Instance.AlphaFactorForCalc;
+        saveData.AlphaFactorExp = GameManager.Instance.AlphaFactorExp;
         saveData.IsAlphaOverflowCollapsed = GameManager.Instance.IsAlphaOverflowCollapsed;
         saveData.AlphaOverflowCount = GameManager.Instance.AlphaOverflowCount;
 
         saveData.IsArrivedBeta = GameManager.Instance.IsArrivedBeta;
+        saveData.AllBFGetInThisTerm = GameManager.Instance.AllBetaFactorGetInThisTerm;
         saveData.BetaFactorForCalc = GameManager.Instance.BetaFactorForCalc;
         saveData.BetaNum = GameManager.Instance.BetaNum;
+        saveData.BetaFactorExp = GameManager.Instance.BetaFactorExp;
         saveData.BetaFactorUsedInAmplification = GameManager.Instance.BetaFactorUsedInAmplification;
         saveData.IsBetaOverflowCollapsed = GameManager.Instance.IsBetaOverflowCollapsed;
         saveData.BetaOverflowCount = GameManager.Instance.BetaOverflowCount;
@@ -154,6 +164,7 @@ public class SavePlayerData : MonoBehaviour
         saveData.IsUpgrade8Completed = BetaUpgradeManager.Instance.IsUpgrade8Completed;
         saveData.IsUpgrade9Completed = BetaUpgradeManager.Instance.IsUpgrade9Completed;
         saveData.IsUpgrade10Completed = BetaUpgradeManager.Instance.IsUpgrade10Completed;
+        saveData.IsUpgrade11Completed = BetaUpgradeManager.Instance.IsUpgrade11Completed;
 
         saveData.LatestCompletedMissionID = BetaMissionManager.Instance.LatestCompletedMissionID;
 

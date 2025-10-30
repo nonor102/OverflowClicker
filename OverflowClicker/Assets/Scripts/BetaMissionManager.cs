@@ -234,7 +234,7 @@ public class BetaMissionManager : MonoBehaviour
             switch (tryMissionID)
             {
                 case 1:
-                    GameManager.Instance.BetaFactorPerGainDecreaser(100); // ƒNƒŠƒbƒN‚²‚Æ‚É“¾‚ç‚ê‚éAF‚ÌŠl“¾—Ê‚ğ1%‚É§ŒÀ
+                    GameManager.Instance.AlphaFactorPerClickDecreaser(100); // ƒNƒŠƒbƒN‚²‚Æ‚É“¾‚ç‚ê‚éAF‚ÌŠl“¾—Ê‚ğ1%‚É§ŒÀ
                     break;
                 case 2:
                     IsBetaMission2NowExecuting = true;
@@ -260,7 +260,7 @@ public class BetaMissionManager : MonoBehaviour
                     BetaUpgradeManager.Instance.DisableFlagsAndMultiEtc(); // ‹­‰»‚ğ–³Œø‰»
                     break;
                 case 9:
-                    GameManager.Instance.AddAlphaFactorExp(0.1); // AFŠl“¾w”‚ğ0.1‚É§ŒÀ
+                    GameManager.Instance.SetAlphaFactorExp(0.1); // AFŠl“¾w”‚ğ0.1‚É§ŒÀ
                     break;
                 case 10:
                     GameManager.Instance.AlphaFactorGainDisabled(); // AFŠl“¾—Ê‚ğ1‚É‚·‚é
@@ -318,7 +318,7 @@ public class BetaMissionManager : MonoBehaviour
                     }
                     break;
                 case 9:
-                    GameManager.Instance.AddAlphaFactorExp(10); // AFŠl“¾w”‚ğ‚à‚Æ‚É‚à‚Ç‚·
+                    GameManager.Instance.SetAlphaFactorExp(1); // AFŠl“¾w”‚ğ‚à‚Æ‚É‚à‚Ç‚·
                     break;
                 case 10:
                     GameManager.Instance.AddAlphaFactorPerClick(AFPerClickBeforeMission); // AFŠl“¾—Ê‚ğ‚à‚Æ‚É‚à‚Ç‚·
@@ -331,5 +331,11 @@ public class BetaMissionManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void ResetAllMissions()
+    {
+        LatestCompletedMissionID = 0;
+        InitializeMissions();
     }
 }

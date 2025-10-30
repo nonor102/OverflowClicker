@@ -17,8 +17,14 @@ public class AlphaFactor : MonoBehaviour
     [SerializeField] private GameObject displayFactorsButton;
     [SerializeField] private GameObject nowFactorsPanel;
 
-    private double displayAlpfaFactor; // ボタンに表示する用のAF
+    private double displayAlphaFactor; // ボタンに表示する用のAF
     private double displayBetaFactor; // ボタンに表示する用のBF
+
+    private double displayAFPerClickInEquation; // AFの計算式に表示する、クリックで得られるAF
+    private double displayAFMultiInEquation; // AFの計算式に表示する、AF乗数
+
+    private string displayAFPerClickText; // AFの計算式に表示する、クリックで得られるAFのテキスト用
+    private string displayAFMultiText; // AFの計算式に表示する、AF乗数のテキスト用
 
     public void OnAlphaFactorButtonClicked()
     {
@@ -38,14 +44,14 @@ public class AlphaFactor : MonoBehaviour
 
     void Update()
     {
-        displayAlpfaFactor = Math.Pow((GameManager.Instance.AlphaFactorPerClick * GameManager.Instance.AlphaFactorMulti), GameManager.Instance.AlphaFactorExp);
-        if (displayAlpfaFactor < 100) // ボタンに表示用のAFが100以下なら小数点以下2桁まで表示
+        displayAlphaFactor = Math.Pow((GameManager.Instance.AlphaFactorPerClick * GameManager.Instance.AlphaFactorMulti), GameManager.Instance.AlphaFactorExp);
+        if (displayAlphaFactor < 100) // ボタンに表示用のAFが100以下なら小数点以下2桁まで表示
         {
-            alphaFactorGainText.text = "" + $"{displayAlpfaFactor:F2}" + "AFを獲得";
+            alphaFactorGainText.text = "" + $"{displayAlphaFactor:F2}" + "AFを獲得";
         }
         else
         {
-            alphaFactorGainText.text = "" + displayAlpfaFactor + "AFを獲得";
+            alphaFactorGainText.text = "" + displayAlphaFactor + "AFを獲得";
         }
         alphaFactorText.text = "AF: " + GameManager.Instance.AlphaFactorForDisplay;
         if (GameManager.Instance.IsAlphaOverflowCollapsed && GameManager.Instance.AlphaOverflowCount > 0)
@@ -80,7 +86,27 @@ public class AlphaFactor : MonoBehaviour
             displayFactorsButton.SetActive(true);
             nowFactorsPanel.GetComponentInChildren<TextMeshProUGUI>().text = "BF: " + GameManager.Instance.BetaFactorForDisplay + " β: " + GameManager.Instance.BetaNum;
             displayAFEquationButton.SetActive(true);
-            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AFの計算式: \n" + "(" + $"{GameManager.Instance.AlphaFactorPerClick:F2}" + " * " + $"{GameManager.Instance.AlphaFactorMulti:F2}" + ") ^ " + $"{GameManager.Instance.AlphaFactorExp:F2}";
+            displayAFPerClickInEquation = GameManager.Instance.AlphaFactorPerClick;
+            displayAFMultiInEquation = GameManager.Instance.AlphaFactorMulti;
+
+            if(displayAFPerClickInEquation < 100)
+            {
+                displayAFPerClickText = $"{GameManager.Instance.AlphaFactorPerClick:F2}";
+            }
+            else
+            {
+                displayAFPerClickText = "" + GameManager.Instance.AlphaFactorPerClick;
+            }
+
+            if(displayAFMultiInEquation < 100)
+            {
+                displayAFMultiText = $"{GameManager.Instance.AlphaFactorMulti:F2}";
+            }
+            else
+            {
+                displayAFMultiText = "" + GameManager.Instance.AlphaFactorMulti;
+            }
+            nowAFEquationPanel.GetComponentInChildren<TextMeshProUGUI>().text = "AFの計算式: \n" + "(" + displayAFPerClickText + " * " + displayAFMultiText + ") ^ " + $"{GameManager.Instance.AlphaFactorExp:F2}";
         }
     }
 }

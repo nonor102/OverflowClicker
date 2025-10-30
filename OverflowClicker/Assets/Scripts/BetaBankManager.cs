@@ -99,4 +99,10 @@ public class BetaBankManager : MonoBehaviour
         InterestRate = newRate;
         Debug.Log("New InterestRate: " + InterestRate);
     }
+
+    public void ResetBank()
+    {
+        CurrentBetaBankAmount = 0;
+        InterestRate = 0.0001;
+    }
 }

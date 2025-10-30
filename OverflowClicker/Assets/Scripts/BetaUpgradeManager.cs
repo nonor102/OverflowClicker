@@ -164,4 +164,19 @@ public class BetaUpgradeManager : MonoBehaviour
         IsUpgrade5Completed = false; // BetaUpgrade5の効果を打ち消す
         IsUpgrade11Completed = false; // BetaUpgrade11の効果を打ち消す
     }
+
+    public void ResetAllUpgrades() // 全ての強化をリセット
+    {
+        IsUpgrade0Completed = false;
+        IsUpgrade5Completed = false;
+        IsUpgrade6Completed = false;
+        IsUpgrade7Completed = false;
+        IsUpgrade8Completed = false;
+        IsUpgrade9Completed = false;
+        IsUpgrade10Completed = false;
+        IsUpgrade11Completed = false;
+        // フラグが増えるなら随時追加
+
+        InitializeUpgrades();
+    }
 }

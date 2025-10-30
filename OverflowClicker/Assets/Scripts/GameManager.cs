@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     // shortはBF (Beta Factor)という名前で管理する
     public bool IsArrivedBeta { get; private set; } = false; // Betaに到達したかフラグ
     public bool IsAlpha2BetaExecuted { get; private set; } = false; // A2Bが実行されたか (BetaMissionで使用する)
+    public double AllBetaFactorGetInThisTerm { get; private set; } = 0; // これまでの総獲得BF (Revolutionで強化する値を計算するのに使う、Revolutionでリセット)
     public double BetaFactorForCalc { get; private set; } = 0; // 計算用のBF
     public short BetaFactorForDisplay { get; private set; } = 0; // 表示用のBF
     public double BetaNum { get; private set; } = 0; // alpha2betaの回数
@@ -34,6 +35,12 @@ public class GameManager : MonoBehaviour
     public double BetaFactorMultiFromUpgrade11 { get; private set; } = 1; // BetaUpgrade11でβでBF獲得量が増えるので、それ用の変数
     public bool IsBetaOverflowCollapsed { get; private set; } = false; // Betaのオーバーフローがcollapseしたかどうかフラグ
     public double BetaOverflowCount { get; private set; } = 0; // Betaがオーバーフローした回数
+
+    // 以降は都度作成
+
+    public bool IsArrivedGamma { get; private set; } = false; // Gammaに到達したかフラグ
+    public bool IsArrivedDelta { get; private set; } = false; // Deltaに到達したかフラグ
+    public bool IsArrivedEpsilon { get; private set; } = false; // Epsilonに到達したかフラグ
 
     private void Awake()
     {
@@ -57,12 +64,15 @@ public class GameManager : MonoBehaviour
     public void InitializeDataFromJson(SaveData saveData) // jsonのデータをいれる
     {
         AlphaFactorForCalc = saveData.AlphaFactorForCalc;
+        AlphaFactorExp = saveData.AlphaFactorExp;
         IsAlphaOverflowCollapsed = saveData.IsAlphaOverflowCollapsed;
         AlphaOverflowCount = saveData.AlphaOverflowCount;
 
         IsArrivedBeta = saveData.IsArrivedBeta;
+        AllBetaFactorGetInThisTerm = saveData.AllBFGetInThisTerm;
         BetaFactorForCalc = saveData.BetaFactorForCalc;
         BetaNum = saveData.BetaNum;
+        BetaFactorExp = saveData.BetaFactorExp;
         BetaFactorUsedInAmplification = saveData.BetaFactorUsedInAmplification;
         IsBetaOverflowCollapsed = saveData.IsBetaOverflowCollapsed;
         BetaOverflowCount = saveData.BetaOverflowCount;
@@ -141,9 +151,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("AlphaFactorMulti: " + AlphaFactorMulti);
     }
 
-    public void AddAlphaFactorExp(double num) // numの値をAlphaFactorExpに掛けて値を上昇させる関数
+    public void SetAlphaFactorExp(double num) // numの値をAlphaFactorExpの値にする関数
     {
-        AlphaFactorExp *= num;
+        AlphaFactorExp = num;
         Debug.Log("AlphaFactorExp: " + AlphaFactorExp);
     }
 
@@ -208,7 +218,7 @@ public class GameManager : MonoBehaviour
         AlphaFactorMulti = 1;
     }
 
-    public void AlphaFactorMultiDecreaser(double num)
+    public void AlphaFactorMultiDecreaser(double num) // BetaMission用の関数、AF獲得量を減少させる
     {
         AlphaFactorMulti /= num;
     }
@@ -216,6 +226,7 @@ public class GameManager : MonoBehaviour
     public void AddBetaFactor() // BetaFactorの値を増加させる関数
     {
         BetaFactorForCalc += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11; // ((BetaFactorPerGain * BetaFactorMulti) ^ BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11 という計算
+        AllBetaFactorGetInThisTerm += Math.Pow((BetaFactorPerGain * BetaFactorMulti), BetaFactorExp) * BetaFactorMultiFromUpgrade6 * BetaFactorMultiFromUpgrade11; // 上の式と同じ量を加算
     }
 
     public void AddBetaFactorFromBank(double num) // 銀行からBFを追加する関数
@@ -224,7 +235,7 @@ public class GameManager : MonoBehaviour
         BetaFactorSyncer();
     }
 
-    public void SubBetaFactor(double num)
+    public void SubBetaFactor(double num) // BFを減らす関数
     {
         BetaFactorForCalc -= num;
         BetaFactorSyncer();
@@ -291,5 +302,24 @@ public class GameManager : MonoBehaviour
     public void BetaFactorMultiDisabled() // BetaMission用の関数、BF獲得乗数を1にする
     {
         BetaFactorMulti = 1;
+    }
+
+    public void ResetBetaByRevolution() // 革命で変数とかをリセットする関数
+    {
+        ResetAlpha();
+        AlphaFactorPerClick = 1;
+        AlphaFactorMulti = 1;
+
+        IsArrivedBeta = false;
+        IsAlphaOverflowCollapsed = false;
+        AllBetaFactorGetInThisTerm = 0;
+        BetaFactorForCalc = 0;
+        BetaNum = 0;
+        BetaNumPerGain = 1;
+        BetaFactorPerGain = 1;
+        BetaFactorMulti = 1;
+        BetaFactorMultiFromUpgrade6 = 1;
+        BetaFactorUsedInAmplification = 0;
+        BetaFactorMultiFromUpgrade11 = 1;
     }
 }

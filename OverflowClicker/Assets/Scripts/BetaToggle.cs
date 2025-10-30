@@ -53,8 +53,5 @@ public class BetaToggle : MonoBehaviour
             revolution.interactable = true;
             revolutionText.text = "Šv–½";
         }
-        
-        
-        
     }
 }
